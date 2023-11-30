@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:growth_guardian/widget/cart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: card()
+    );
   }
 }
