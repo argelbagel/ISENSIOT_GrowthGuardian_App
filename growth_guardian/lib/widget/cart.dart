@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 class card extends StatelessWidget {
-  const card({super.key});
+  const card({super.key, required this.plantNames});
+
+  final String plantNames;
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    
+    List<String> plantNamesList = plantNames.split(",");
+    if(plantNamesList.length<3){
+      plantNamesList.add("");
+    }
     return Container(
       width: 10.0,
       height: 10.0,
@@ -45,30 +50,19 @@ class card extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Gegeven naam van plant\n',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          TextSpan(
-                            text: 'Wetenschappelijke naam\n',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          TextSpan(
-                            text: 'Melding!',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ],
-                      ),
-                    ),
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[0], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,),))),
+                        Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[1], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,),))),
+                        Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[2], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.error,),))),
+                      ],
+                    )
                   ),
                 ),
               ),
-              Expanded(
-                child: Align(
+                Align(
                   alignment: Alignment.centerRight,
                   child: Icon(
                     Icons.arrow_forward_ios,
@@ -76,7 +70,6 @@ class card extends StatelessWidget {
                     size: 70.0,
                   ),
                 ),
-              ),
             ]
           ),
         ),
