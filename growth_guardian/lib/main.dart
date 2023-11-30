@@ -51,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
   void navigationTapped(int index) {
     setState(() {
       selectedPage = index;
-      page_controller.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
+      page_controller.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
@@ -76,7 +76,7 @@ class _LandingPageState extends State<LandingPage> {
       onDestinationSelected: (index){navigationTapped(index);},
       destinations:  [
         NavigationDestination(
-          icon: Icon(Icons.home, color: Theme.of(context).colorScheme.secondary,), 
+          icon: Icon(Icons.home,color: Theme.of(context).colorScheme.secondary,), 
           label: ''
         ),
         NavigationDestination(
