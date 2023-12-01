@@ -115,7 +115,7 @@ class _AddPageState extends State<AddPage> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 75.0),
+                    padding: const EdgeInsets.only(left: 75.0, top: 10.0),
                     child: Row(
                       children: [
                         Text('Temperatuur: '),
@@ -124,7 +124,7 @@ class _AddPageState extends State<AddPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 75.0),
+                    padding: const EdgeInsets.only(left: 75.0, top: 10.0),
                     child: Row(
                       children: [
                         Text('Luchtvochtigheid: '),
@@ -133,7 +133,7 @@ class _AddPageState extends State<AddPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 75.0),
+                    padding: const EdgeInsets.only(left: 75.0,top: 10.0),
                     child: Row(
                       children: [
                         Text('Lichtniveau: '),
