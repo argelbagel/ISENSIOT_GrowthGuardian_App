@@ -1,20 +1,35 @@
-
 import 'package:flutter/material.dart';
 import 'package:growth_guardian/widget/cart.dart';
+import '../main.dart' show PlantStorage;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.storage});
+
+  final PlantStorage storage;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-List<String> rooms = ["Woonkamer;Hoekplant,Charophyllum temulum;Bankplant,Aglaonema;Vette plant,Aeonium Crassulaceae","Badkamer;Hoekplant,Charophyllum temulum;Bankplant,Aglaonema;Vette plant,Aeonium Crassulaceae"];
+List<String> rooms = [];
 List<String> warnings = ["Woonkamer;Hoekplant,Luchtvochtigheid te hoog;Vette plant,Krijgt te veel zonlicht","Badkamer;Vette plant,Krijgt te veel zonlicht"];
 
-void getLocalStorage(){
+@override
+  void initState() {
+    super.initState();
+    getLocalStorage();
+  }
 
+void getLocalStorage(){
+  widget.storage.readPlants().then((value) {
+      setState(() {
+        final splitValues = value.split('/');
+        for (int i = 0; i < splitValues.length; i++) {
+          rooms.add(splitValues[i]);
+        }
+      });
+    });
 }
 
 Future refresh() async {
@@ -65,7 +80,7 @@ class RoomList extends StatelessWidget {
         for(int spliceWarningIntoPlantsIndex = 0;spliceWarningIntoPlantsIndex<warningsSplit.length;spliceWarningIntoPlantsIndex++){
           List<String> warningIntoString = warningsSplit[spliceWarningIntoPlantsIndex].split(",");
           for(int addToPlantIndex = 0; addToPlantIndex<roomContent.length;addToPlantIndex++){
-            if(roomContent[addToPlantIndex].contains(warningIntoString[0])){
+            if(roomContent[addToPlantIndex].contains(warningIntoString[0]) && roomContent[addToPlantIndex] != roomContent[0]){
               roomContent[addToPlantIndex] = roomContent[addToPlantIndex] + "," + warningIntoString[warningIntoString.length-1];
             }
           }
