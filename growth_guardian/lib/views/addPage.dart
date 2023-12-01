@@ -108,19 +108,47 @@ class _AddPageState extends State<AddPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text(
-              "Ideale leefomgeving voor deze plant:\nTemperatuur:              ...\nLuchtvochtigheid:      ...\nLichtniveau:                ...",
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
-              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Ideale leefomgeving voor deze plant:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 75.0),
+                    child: Row(
+                      children: [
+                        Text('Temperatuur: '),
+                        Text('...'),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 75.0),
+                    child: Row(
+                      children: [
+                        Text('Luchtvochtigheid: '),
+                        Text('...'),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 75.0),
+                    child: Row(
+                      children: [
+                        Text('Lichtniveau: '),
+                      Text('...'),
+                    ],
+                                    ),
+                  ),
+              ],
             ),
           ),
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
                 child: Container(
                   width: 340.0,
                   height: 50.0,
