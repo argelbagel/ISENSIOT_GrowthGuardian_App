@@ -16,10 +16,10 @@ List<String> rooms = [];
 List<String> warnings = ["Woonkamer;Hoekplant,Luchtvochtigheid te hoog;Vette plant,Krijgt te veel zonlicht","Badkamer;Vette plant,Krijgt te veel zonlicht"];
 
 @override
-  void initState() {
-    super.initState();
-    getLocalStorage();
-  }
+void initState() {
+  super.initState();
+  getLocalStorage();
+}
 
 void getLocalStorage(){
   widget.storage.readPlants().then((value) {
