@@ -45,4 +45,4 @@ app.*.map.json
 
 # flutter info that is irrelevant
 pubspec.lock
-macos/Flutter/GeneratedPluginRegistrant.swift
+/macos/Flutter/GeneratedPluginRegistrant.swift
