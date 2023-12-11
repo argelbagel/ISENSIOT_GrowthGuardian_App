@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 
 class card extends StatelessWidget {
-  const card({super.key, required this.plantNames});
+  const card({super.key, required this.plantNames, required this.roomName,});
 
   final String plantNames;
+  final String roomName;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +16,10 @@ class card extends StatelessWidget {
     if(plantNamesList.length<3){
       plantNamesList.add("");
     }
+
+    //String dirAlbum = '/data/user/0/com.example.growth_guardian/cache/';
+    String dirFoto = path.join('/data/user/0/com.example.growth_guardian/cache/$roomName/_${plantNamesList[0].toLowerCase()}.jpg');
+
     return Container(
       width: 10.0,
       height: 10.0,
@@ -39,11 +47,14 @@ class card extends StatelessWidget {
                 width: 100.0, 
                 height: 100.0, 
                 decoration: BoxDecoration(
-                  color: Colors.black,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.0),
                     bottomLeft: Radius.circular(10.0),
                   ),
+                ),
+                 child: Image.file(
+                  File(dirFoto),
+                  fit: BoxFit.cover,
                 ),
               ),
               Expanded(

@@ -31,7 +31,7 @@ class _ProblemPageState extends State<ProblemPage> {
         List<String> warningSplit = allInRoom[i].split(",");
         allWarnings.add(warningSplit[0]+","+allInRoom[0]+","+warningSplit[1]);
       }
-    }
+    }   
 
     return Scaffold(
       body: RefreshIndicator(
@@ -50,9 +50,12 @@ class _ProblemPageState extends State<ProblemPage> {
             itemCount: allWarnings.length,
             itemBuilder: (context, index) {
               if (index < allWarnings.length) {
+                String warning = allWarnings[index];
+                List<String> parts = warning.split(',');
+
                 return Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: allWarnings[index],)));
+                  child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: allWarnings[index], roomName: parts[1])));
               }
             }
           )

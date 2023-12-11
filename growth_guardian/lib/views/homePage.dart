@@ -100,7 +100,7 @@ class RoomList extends StatelessWidget {
         //card()
         for(var i=1;i<roomContent.length;i++) Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
-          child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: roomContent[i],)),
+          child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: roomContent[i], roomName: roomContent[0])),
         )
       ],
     );

@@ -101,7 +101,7 @@ class _PlantPageState extends State<PlantPage> {
                 "Satus van de plant",
                 style: TextStyle(
                   fontSize: 12.0,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),
@@ -207,8 +207,8 @@ class _PlantPageState extends State<PlantPage> {
                         Text('Lichtniveau: '),
                       Text('...'),
                     ],
-                                    ),
                   ),
+                ),
               ],
             ),
           ),
