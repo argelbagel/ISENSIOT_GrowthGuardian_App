@@ -3,7 +3,9 @@ import 'package:growth_guardian/widget/cart.dart';
 import '../main.dart' show PlantStorage;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.storage});
+  const HomePage({super.key, required this.storage, required this.switchToPlantPage});
+
+  final Function switchToPlantPage;
 
   final PlantStorage storage;
 
@@ -55,7 +57,7 @@ Future refresh() async {
             itemCount: rooms.length,
             itemBuilder: (context, index) {
               if (index < rooms.length) {
-                return RoomList(room: rooms[index],allWarnings: warnings,);
+                return RoomList(room: rooms[index],allWarnings: warnings, switchToPlantPage: widget.switchToPlantPage,);
               }
             }
           )
@@ -65,10 +67,11 @@ Future refresh() async {
 }
 
 class RoomList extends StatelessWidget {
-  RoomList({super.key, required this.room, required this.allWarnings,});
+  RoomList({super.key, required this.room, required this.allWarnings, required this.switchToPlantPage});
 
   final String room;
   final List<String> allWarnings;
+  final Function switchToPlantPage;
 
 
   @override
@@ -100,7 +103,7 @@ class RoomList extends StatelessWidget {
         //card()
         for(var i=1;i<roomContent.length;i++) Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
-          child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: roomContent[i], roomName: roomContent[0])),
+          child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: roomContent[i], roomName: roomContent[0], switchToPlantPage: switchToPlantPage,)),
         )
       ],
     );

@@ -74,6 +74,12 @@ class PlantStorage {
     // Write the file
     return file.writeAsString(currentContent.join("/"));
   }
+  /*
+  Future<String> switchToPlantPage(String room, String plantName, String scientificName, String locationImage) async{
+    final page_controller = PageController(initialPage: 0,);
+    page_controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    return '$room, $plantName, $scientificName, $locationImage';
+  }*/
 }
 
 class GrowthGuardianApp extends StatelessWidget {
@@ -106,6 +112,9 @@ class _LandingPageState extends State<LandingPage> {
   //The selectedPage is the active page for the navigation bar
   int selectedPage = 0;
 
+  //Active plant
+  List<String> activePlantInformation = ['kelder', 'kelderplant', 'klederusplantus', 'locatie']; 
+
   @override
   void dispose() {
     page_controller.dispose();
@@ -127,6 +136,17 @@ class _LandingPageState extends State<LandingPage> {
     });
   }
 
+  // 
+  void switchToPlantPage(String room, String plantName, String scientificName, String locationImage) {
+    setState(() {
+      activePlantInformation[0] = room;
+      activePlantInformation[1] = plantName;
+      activePlantInformation[2] = scientificName;
+      activePlantInformation[3] = locationImage;
+      page_controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +156,9 @@ class _LandingPageState extends State<LandingPage> {
         controller: page_controller,
         onPageChanged: (index){pageChanged(index);},
         children: [
-          HomePage(storage: PlantStorage(),),
-          ProblemPage(),
-          PlantPage(),
+          HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage,),
+          ProblemPage(switchToPlantPage: switchToPlantPage,),
+          PlantPage(activePlantInformation: activePlantInformation,),
           AddPage(storage: PlantStorage(),),    
         ]
       ),

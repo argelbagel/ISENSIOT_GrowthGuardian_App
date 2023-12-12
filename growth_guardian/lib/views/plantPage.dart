@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class PlantPage extends StatefulWidget {
-  const PlantPage({super.key});
+  const PlantPage({super.key, required this.activePlantInformation});
+
+  final List<String> activePlantInformation;
 
   @override
   State<PlantPage> createState() => _PlantPageState();
@@ -12,6 +15,13 @@ class _PlantPageState extends State<PlantPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
+    /*
+    print("Naam: ${widget.activePlantInformation[0]}");
+    print("Wetenschappelijke naam: ${widget.activePlantInformation[2]}");
+    print("Locatie: ${widget.activePlantInformation[2]}");
+    print("Fotolocatie: ${widget.activePlantInformation[3]}");
+    */
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -34,6 +44,11 @@ class _PlantPageState extends State<PlantPage> {
                         offset: Offset(0, 3),
                       ),
                     ],
+                    image: DecorationImage(
+                      image: FileImage(
+                          File(widget.activePlantInformation[3])),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -48,8 +63,9 @@ class _PlantPageState extends State<PlantPage> {
                               borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(10.0),
                                 bottomLeft: Radius.circular(10.0),
-                              ),
+                              ), 
                             ),
+                            
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                               child: Column(
@@ -57,7 +73,7 @@ class _PlantPageState extends State<PlantPage> {
                                   Row(
                                     children: [
                                       Text(
-                                        'Naam',
+                                        widget.activePlantInformation[1],
                                         style: TextStyle(
                                           fontSize: 20.0, // Replace with your desired font size
                                           fontWeight: FontWeight.bold, // Replace with your desired font weight
@@ -65,7 +81,7 @@ class _PlantPageState extends State<PlantPage> {
                                       ),
                                       Spacer(),
                                       Text(
-                                        'Locatie',
+                                        widget.activePlantInformation[0],
                                         style: TextStyle(
                                           fontSize: 14.0, // Replace with your desired font size
                                         ),
@@ -76,7 +92,7 @@ class _PlantPageState extends State<PlantPage> {
                                     alignment: Alignment.centerLeft,
                                     child: Container(
                                       child: Text(
-                                        'Wetenschappelijke naam',
+                                        widget.activePlantInformation[2],
                                         style: TextStyle(
                                           fontSize: 16.0, // Replace with your desired font size
                                         ),

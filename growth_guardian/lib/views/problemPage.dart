@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:growth_guardian/widget/cart.dart';
 
 class ProblemPage extends StatefulWidget {
-  const ProblemPage({super.key});
+  const ProblemPage({super.key, required this.switchToPlantPage});
+
+  final Function switchToPlantPage;
 
   @override
   State<ProblemPage> createState() => _ProblemPageState();
@@ -55,7 +57,7 @@ class _ProblemPageState extends State<ProblemPage> {
 
                 return Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: allWarnings[index], roomName: parts[1])));
+                  child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: allWarnings[index], roomName: parts[1], switchToPlantPage: widget.switchToPlantPage,)));
               }
             }
           )
