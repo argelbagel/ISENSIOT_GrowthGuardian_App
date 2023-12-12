@@ -57,10 +57,11 @@ class card extends StatelessWidget {
                       topLeft: Radius.circular(10.0),
                       bottomLeft: Radius.circular(10.0),
                     ),
-                  ),
-                   child: Image.file(
-                    File(dirFoto),
-                    fit: BoxFit.fill,
+                    image: DecorationImage(
+                      image: FileImage(
+                          File(dirFoto)),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Expanded(

@@ -21,7 +21,7 @@ class _PlantPageState extends State<PlantPage> {
     print("Locatie: ${widget.activePlantInformation[2]}");
     print("Fotolocatie: ${widget.activePlantInformation[3]}");
     */
-    
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
