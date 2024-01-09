@@ -58,7 +58,8 @@ class PlantStorage {
 
     //Takes the split rooms and adds the plant to correct room if it already exists and that name is not already taken
     for(int i=0;i<currentContent.length;i++){
-      if(currentContent[i].contains(room)){
+      debugPrint(currentContent[i].toLowerCase());
+      if(currentContent[i].toLowerCase().contains(room.toLowerCase())){
         if(!currentContent[i].contains(name)){
           currentContent[i] = currentContent[i]+";"+name+","+scientificName;
         }
@@ -132,7 +133,7 @@ class _LandingPageState extends State<LandingPage> {
   void navigationTapped(int index) {
     setState(() {
       selectedPage = index;
-      page_controller.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      goToPage(index);
     });
   }
 
@@ -143,10 +144,13 @@ class _LandingPageState extends State<LandingPage> {
       activePlantInformation[1] = plantName;
       activePlantInformation[2] = scientificName;
       activePlantInformation[3] = locationImage;
-      page_controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      goToPage(2);
     });
   }
 
+  void goToPage(int index){
+    page_controller.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +163,7 @@ class _LandingPageState extends State<LandingPage> {
           HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage,),
           ProblemPage(switchToPlantPage: switchToPlantPage,),
           PlantPage(activePlantInformation: activePlantInformation,),
-          AddPage(storage: PlantStorage(),),    
+          AddPage(storage: PlantStorage(), goToPage: goToPage,),    
         ]
       ),
       //Below every page is the navigationbar to allow navigation and tell the user where they are

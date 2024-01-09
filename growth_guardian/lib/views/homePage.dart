@@ -26,9 +26,13 @@ void initState() {
 void getLocalStorage(){
   widget.storage.readPlants().then((value) {
       setState(() {
+        rooms.clear();
+        debugPrint(value.toString());
         final splitValues = value.split('/');
         for (int i = 0; i < splitValues.length; i++) {
-          rooms.add(splitValues[i]);
+          if(splitValues[i] != ""){
+            rooms.add(splitValues[i]);
+          }
         }
       });
     });
@@ -67,7 +71,7 @@ Future refresh() async {
 }
 
 class RoomList extends StatelessWidget {
-  RoomList({super.key, required this.room, required this.allWarnings, required this.switchToPlantPage});
+  const RoomList({super.key, required this.room, required this.allWarnings, required this.switchToPlantPage});
 
   final String room;
   final List<String> allWarnings;

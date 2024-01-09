@@ -6,10 +6,10 @@ import 'dart:io' as io;
 import '../main.dart' show PlantStorage;
 
 class AddPage extends StatefulWidget {
-  const AddPage({super.key, required this.storage});
+  const AddPage({super.key, required this.storage, required this.goToPage});
 
   final PlantStorage storage;
-
+  final Function goToPage;
 
   @override
   State<AddPage> createState() => _AddPageState();
@@ -20,23 +20,31 @@ class _AddPageState extends State<AddPage> {
   String plantWetenschappelijk = 'Wetenschappelijke naam';
 
   CameraController? _cameraController;
-  Future<void>? _initializeControllerFuture;
+
+  bool cameraInitialised = false;
 
   @override
   void initState() {
     super.initState();
 
-    availableCameras().then((cameras) {
-      print("Available Cameras:");
-      for (final camera in cameras) {
-        print("Camera ${camera.name}");
-      }
+    initializeCamera();
+  }
 
-      if (cameras.isNotEmpty) {
-        _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
-        _initializeControllerFuture = _cameraController?.initialize();
-      }
-    });
+  Future<void> initializeCamera() async{
+    final cameras = await availableCameras();
+    print("Available Cameras:");
+    for (final camera in cameras) {
+      print("Camera ${camera.name}");
+    }
+
+    if (cameras.isNotEmpty) {
+      _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+      //_initializeControllerFuture = _cameraController?.initialize();
+      await _cameraController?.initialize();
+      setState(() {
+        cameraInitialised = true;
+      });
+    }
   }
 
   @override
@@ -49,6 +57,7 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     TextEditingController _plantNaam = TextEditingController();
+    TextEditingController _plantSoort = TextEditingController();
     TextEditingController _plantLocatie = TextEditingController();
 
     return Scaffold(
@@ -73,63 +82,36 @@ class _AddPageState extends State<AddPage> {
                       ),
                     ],
                   ),
-                  child: FutureBuilder<void>(
-                    future: _initializeControllerFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return CameraPreview(_cameraController!);
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
+                  
+                  child: cameraInitialised
+                  ? CameraPreview(_cameraController!)
+                  : Center(child: CircularProgressIndicator())
+                  // FutureBuilder<void>(
+                  //   future: _initializeControllerFuture,
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.connectionState == ConnectionState.done) {
+                  //       return CameraPreview(_cameraController!);
+                  //     } else {
+                  //       return Center(child: CircularProgressIndicator());
+                  //     }
+                  //   },
+                  // ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                '$plantWetenschappelijk',
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
-              child: Container(
-                height: 50,
-                child: TextField(
-                  controller: _plantNaam,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.surface,
-                    labelText: 'Geef de plant een herkenbare naam',
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
-              child: Container(
-                height: 50.0,
-                child: TextField(
-                  controller: _plantLocatie,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.surface,
-                    labelText: 'Waar staat de plant in het huis?',
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(10.0),
+            //   child: Text(
+            //     '$plantWetenschappelijk',
+            //     style: TextStyle(
+            //       fontSize: 12.0,
+            //       color: Theme.of(context).colorScheme.onSurface,
+            //     ),
+            //   ),
+            // ),
+            addTextField(fieldController: _plantNaam, labelText: 'Geef de plant een herkenbare naam',),
+            addTextField(fieldController: _plantSoort, labelText: 'Wat voor soort plant is het?',),
+            addTextField(fieldController: _plantLocatie, labelText: 'Waar staat de plant in het huis?',),
             Padding(
               padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -250,7 +232,9 @@ class _AddPageState extends State<AddPage> {
                           }    
                         }
 
-                        widget.storage.addPlant(_plantLocatie.text, _plantNaam.text, plantWetenschappelijk);
+
+
+                        widget.storage.addPlant(_plantLocatie.text, _plantNaam.text, _plantSoort.text);
                         
                         showDialog(
                           context: context,
@@ -262,6 +246,7 @@ class _AddPageState extends State<AddPage> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
+                                    widget.goToPage(0);
                                   },
                                   child: Text("OK"),
                                 ),
@@ -276,6 +261,34 @@ class _AddPageState extends State<AddPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class addTextField extends StatelessWidget {
+  const addTextField({super.key, required this.fieldController, required this.labelText});
+
+  final TextEditingController fieldController;
+  final String labelText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+      child: Container(
+        height: 50,
+        child: TextField(
+          controller: fieldController,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            filled: true,
+            fillColor: Theme.of(context).colorScheme.surface,
+            labelText: labelText,
+          ),
         ),
       ),
     );
@@ -310,4 +323,45 @@ Padding(
   ),
 ),
 */
-            
+
+// class PlantDropdownTextInput extends StatelessWidget {
+//   PlantDropdownTextInput({super.key, required this.changeSelectedSpecies});
+
+
+//   final Function changeSelectedSpecies;
+
+//   final String labelText = "Wat voor soort plant is het?";
+//   final List<String> plantSpecies = ["Andiantum","Cactus", "Varen"];
+  
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return FormField<T>(
+//       builder: (FormFieldState<T> state) {
+//         return InputDecorator(
+//           decoration: InputDecoration(
+//             contentPadding: EdgeInsets.symmetric(
+//                 horizontal: 20.0, vertical: 15.0),
+//             labelText: labelText,
+//             border:
+//                 OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+//           ),
+//           isEmpty: value == null || value == '',
+//           child: DropdownButtonHideUnderline(
+//             child: DropdownButton<String>(
+//               value: value,
+//               isDense: true,
+//               onChanged: (value){},
+//               items: options.map((String value) {
+//                 return DropdownMenuItem<T>(
+//                   value: value,
+//                   child: Text(getLabel(value)),
+//                 );
+//               }).toList(),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
