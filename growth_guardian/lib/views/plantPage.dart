@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:growth_guardian/widget/measureClass.dart';
 import 'package:growth_guardian/widget/plantPageLineChart.dart';
-
+import 'package:sqflite/sqflite.dart';
 
 class PlantPage extends StatefulWidget {
   const PlantPage({super.key, required this.activePlantInformation});
@@ -60,12 +60,18 @@ class _PlantPageState extends State<PlantPage> {
 
   @override
   Widget build(BuildContext context) {
+    QueryWaterniveau();
+    QueryLuchtvochtigheid();
+    QueryTemperatuur();
+    QueryBodemvocht();
+    QueryLichtniveau();
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     /*
-    print("Naam: ${widget.activePlantInformation[0]}");
+    print("Naam: ${widget.activePlantInformation[1]}");
     print("Wetenschappelijke naam: ${widget.activePlantInformation[2]}");
-    print("Locatie: ${widget.activePlantInformation[2]}");
+    print("Locatie: ${widget.activePlantInformation[0]}");
     print("Fotolocatie: ${widget.activePlantInformation[3]}");
     */
 
@@ -103,16 +109,16 @@ class _PlantPageState extends State<PlantPage> {
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            width: screenWidth * 0.9, 
-                            height: 80.0, 
+                            width: screenWidth * 0.9,
+                            height: 80.0,
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.secondary,
                               borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(10.0),
                                 bottomLeft: Radius.circular(10.0),
-                              ), 
+                              ),
                             ),
-                            
+
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                               child: Column(
@@ -169,8 +175,8 @@ class _PlantPageState extends State<PlantPage> {
               ),
             ),
             Container(
-              width: 250.0, 
-              height: 40.0, 
+              width: 250.0,
+              height: 40.0,
               decoration: BoxDecoration(
                 color:  Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(10.0),
@@ -187,8 +193,8 @@ class _PlantPageState extends State<PlantPage> {
                     ],
                   ),
                 ),
-              ), 
-            ), 
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -222,8 +228,8 @@ class _PlantPageState extends State<PlantPage> {
                     ],
                   ),
                 ],
-              ),  
-            ),     
+              ),
+            ),
 
             Padding(
               padding: EdgeInsets.all(10.0),
@@ -245,10 +251,10 @@ class _PlantPageState extends State<PlantPage> {
                   ),
                 ],
               ),
-            ),     
-            
-            
-            
+            ),
+
+
+
             Padding(
             padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -308,7 +314,7 @@ class elementTextButton extends StatelessWidget {
         textStyle: currentElement==buttonElement
         ? TextStyle(fontWeight: FontWeight.bold)
         : TextStyle(fontWeight: FontWeight.normal)
-      ), 
+      ),
       onPressed: (){changeElement(buttonElement);},
       child: Text(buttonElement + ': ')
     );
@@ -333,19 +339,74 @@ class intervalButton extends StatelessWidget {
           backgroundColor: currentMode==buttonMode
           ? Theme.of(context).colorScheme.primary
           : Theme.of(context).colorScheme.secondary,
-          
+
           elevation: 0,
           foregroundColor: currentMode==buttonMode
           ? Theme.of(context).colorScheme.onPrimary
           : Theme.of(context).colorScheme.onSecondary,
-    
+
           textStyle: currentMode==buttonMode
           ? TextStyle(fontWeight: FontWeight.bold)
           : TextStyle(fontWeight: FontWeight.normal)
-        ), 
+        ),
         onPressed: (){changeMode(buttonMode);},
         child: Text(buttonMode)
       ),
     );
+  }
+}
+
+void QueryWaterniveau() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT waterniveau, tijd FROM dogs');
+    print('Done waterniveau');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryLichtniveau() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT lichtniveau, tijd FROM dogs');
+    print('Done lichtniveau');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryTemperatuur() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT temperatuur, tijd FROM dogs');
+    print('Done temperatuur');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryBodemvocht() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT bodemvocht, tijd FROM dogs');
+    print('Done bodemvocht');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryLuchtvochtigheid() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT luchtvochtigheid, tijd FROM dogs');
+    print('Done luchtvochtigheid');
+  } catch (Exception) {
+    print('An error occurred!');
   }
 }
