@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:growth_guardian/widget/measureClass.dart';
+import 'package:growth_guardian/widget/plantPageLineChart.dart';
+
 
 class PlantPage extends StatefulWidget {
   const PlantPage({super.key, required this.activePlantInformation});
@@ -11,6 +14,34 @@ class PlantPage extends StatefulWidget {
 }
 
 class _PlantPageState extends State<PlantPage> {
+  //temp dataseries dummy database data voor graph testen, delete later
+  final List<Measurement> temperatuurData = [
+    Measurement(timeStamp: DateTime.parse('2024-01-09 00:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 01:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 02:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 03:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 04:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 05:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 06:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 07:00:00Z').millisecondsSinceEpoch, measurementValue: 8),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 08:00:00Z').millisecondsSinceEpoch, measurementValue: 13),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 09:00:00Z').millisecondsSinceEpoch, measurementValue: 16),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 10:00:00Z').millisecondsSinceEpoch, measurementValue: 19),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 11:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 12:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 13:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 14:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 15:00:00Z').millisecondsSinceEpoch, measurementValue: 19),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 16:00:00Z').millisecondsSinceEpoch, measurementValue: 18),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 17:00:00Z').millisecondsSinceEpoch, measurementValue: 18),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 18:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 19:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 20:00:00Z').millisecondsSinceEpoch, measurementValue: 23),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 21:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 22:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 23:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
+  ];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -183,9 +214,7 @@ class _PlantPageState extends State<PlantPage> {
               child: Container(
                 width: 350,
                 height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                ),
+                child: PlantPageLineChart(dataList: temperatuurData, mode:"day", element: "temperatuur",),
               ),
             ),     
 
