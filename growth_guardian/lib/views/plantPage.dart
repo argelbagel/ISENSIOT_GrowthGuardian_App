@@ -16,31 +16,47 @@ class PlantPage extends StatefulWidget {
 class _PlantPageState extends State<PlantPage> {
   //temp dataseries dummy database data voor graph testen, delete later
   final List<Measurement> temperatuurData = [
-    Measurement(timeStamp: DateTime.parse('2024-01-09 00:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 01:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 02:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 03:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 04:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 05:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 06:00:00Z').millisecondsSinceEpoch, measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 07:00:00Z').millisecondsSinceEpoch, measurementValue: 8),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 08:00:00Z').millisecondsSinceEpoch, measurementValue: 13),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 09:00:00Z').millisecondsSinceEpoch, measurementValue: 16),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 10:00:00Z').millisecondsSinceEpoch, measurementValue: 19),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 11:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 12:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 13:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 14:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 15:00:00Z').millisecondsSinceEpoch, measurementValue: 19),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 16:00:00Z').millisecondsSinceEpoch, measurementValue: 18),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 17:00:00Z').millisecondsSinceEpoch, measurementValue: 18),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 18:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 19:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 20:00:00Z').millisecondsSinceEpoch, measurementValue: 23),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 21:00:00Z').millisecondsSinceEpoch, measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 22:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 23:00:00Z').millisecondsSinceEpoch, measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 10:00:00Z'), measurementValue: 19),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 11:00:00Z'), measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 12:00:00Z'), measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 13:00:00Z'), measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 14:00:00Z'), measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 15:00:00Z'), measurementValue: 19),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 16:00:00Z'), measurementValue: 18),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 17:00:00Z'), measurementValue: 18),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 18:00:00Z'), measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 19:00:00Z'), measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 20:00:00Z'), measurementValue: 23),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 21:00:00Z'), measurementValue: 22),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 22:00:00Z'), measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-08 23:00:00Z'), measurementValue: 21),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 00:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 01:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 02:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 03:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 04:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 05:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 06:00:00Z'), measurementValue: 3),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 07:00:00Z'), measurementValue: 8),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 08:00:00Z'), measurementValue: 13),
+    Measurement(timeStamp: DateTime.parse('2024-01-09 09:00:00Z'), measurementValue: 16),
   ];
+
+  //Creates the state variables and gives them defaults
+  String mode = "Dag";
+  String element = "Temperatuur";
+
+  void changeMode(String modeValue){
+    setState(() {
+      mode = modeValue;
+    });
+  }
+
+  void changeElement(String elementValue){
+    setState(() {
+      element = elementValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,27 +197,27 @@ class _PlantPageState extends State<PlantPage> {
                 children: [
                   Row(
                     children: [
-                      Text('Temperatuur: '),
+                      elementTextButton(currentElement: element, buttonElement: "Temperatuur", changeElement: changeElement),
                       Text(' ...'),
                       Spacer(),
-                      Text('Luchtvochtigheid: '),
+                      elementTextButton(currentElement: element, buttonElement: "Luchtvochtigheid", changeElement: changeElement),
                       Text('...'),
                     ],
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
-                      Text('Grondwaterniveau: '),
+                      elementTextButton(currentElement: element, buttonElement: "Grondwater niveau", changeElement: changeElement),
                       Text('...'),
                       Spacer(),
-                      Text('Reservoir: '),
+                      elementTextButton(currentElement: element, buttonElement: "Reservoir", changeElement: changeElement),
                       Text('...'),
                     ],
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
-                      Text('Huidige licht: '),
+                      elementTextButton(currentElement: element, buttonElement: "Licht", changeElement: changeElement),
                       Text('...'),
                     ],
                   ),
@@ -211,13 +227,27 @@ class _PlantPageState extends State<PlantPage> {
 
             Padding(
               padding: EdgeInsets.all(10.0),
-              child: Container(
-                width: 350,
-                height: 150,
-                child: PlantPageLineChart(dataList: temperatuurData, mode:"day", element: "temperatuur",),
+              child: Column(
+                children: [
+                  Container(
+                    width: 350,
+                    height: 150,
+                    child: PlantPageLineChart(dataList: temperatuurData, mode:mode, element: element,),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      intervalButton(currentMode: mode, buttonMode: "Dag", changeMode: changeMode),
+                      intervalButton(currentMode: mode, buttonMode: "Week", changeMode: changeMode),
+                      intervalButton(currentMode: mode, buttonMode: "Maand", changeMode: changeMode),
+                      intervalButton(currentMode: mode, buttonMode: "Jaar", changeMode: changeMode),
+                    ],
+                  ),
+                ],
               ),
             ),     
-
+            
+            
             
             Padding(
             padding: const EdgeInsets.all(10.0),
@@ -259,6 +289,62 @@ class _PlantPageState extends State<PlantPage> {
           ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class elementTextButton extends StatelessWidget {
+  const elementTextButton({super.key, required this.currentElement, required this.buttonElement, required this.changeElement});
+
+  final String currentElement;
+  final String buttonElement;
+  final Function changeElement;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(style: TextButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.onBackground,
+        textStyle: currentElement==buttonElement
+        ? TextStyle(fontWeight: FontWeight.bold)
+        : TextStyle(fontWeight: FontWeight.normal)
+      ), 
+      onPressed: (){changeElement(buttonElement);},
+      child: Text(buttonElement + ': ')
+    );
+  }
+}
+
+class intervalButton extends StatelessWidget {
+  const intervalButton({super.key, required this.currentMode, required this.buttonMode, required this.changeMode});
+
+  final String currentMode;
+  final String buttonMode;
+  final Function changeMode;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: ElevatedButton(style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          minimumSize: Size.zero,
+          padding: EdgeInsets.all(6),
+          backgroundColor: currentMode==buttonMode
+          ? Theme.of(context).colorScheme.primary
+          : Theme.of(context).colorScheme.secondary,
+          
+          elevation: 0,
+          foregroundColor: currentMode==buttonMode
+          ? Theme.of(context).colorScheme.onPrimary
+          : Theme.of(context).colorScheme.onSecondary,
+    
+          textStyle: currentMode==buttonMode
+          ? TextStyle(fontWeight: FontWeight.bold)
+          : TextStyle(fontWeight: FontWeight.normal)
+        ), 
+        onPressed: (){changeMode(buttonMode);},
+        child: Text(buttonMode)
       ),
     );
   }

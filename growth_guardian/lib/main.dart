@@ -3,6 +3,7 @@ import 'package:growth_guardian/views/addPage.dart';
 import 'package:growth_guardian/views/homePage.dart';
 import 'package:growth_guardian/views/plantPage.dart';
 import 'package:growth_guardian/views/problemPage.dart';
+import 'package:growth_guardian/views/secretTestView.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
@@ -163,7 +164,8 @@ class _LandingPageState extends State<LandingPage> {
           HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage,),
           ProblemPage(switchToPlantPage: switchToPlantPage,),
           PlantPage(activePlantInformation: activePlantInformation,),
-          AddPage(storage: PlantStorage(), goToPage: goToPage,),    
+          // AddPage(storage: PlantStorage(), goToPage: goToPage,),
+          Test(),    
         ]
       ),
       //Below every page is the navigationbar to allow navigation and tell the user where they are

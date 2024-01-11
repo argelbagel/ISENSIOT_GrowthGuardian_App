@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:growth_guardian/widget/measureClass.dart';
 
 class PlantPageLineChart extends StatelessWidget {
@@ -9,69 +10,77 @@ class PlantPageLineChart extends StatelessWidget {
   final String mode;
   final String element;
 
-
-  (num,num) getStartNumber(){
-    DateTime now = DateTime.now();
-    late num startNumber;
-    late num endNumber;
-    switch(mode){
-      case "day":
-        startNumber = now.subtract(Duration(days: 1)).hour;
-        endNumber = now.hour;
-        break;
-      case "week":
-        startNumber = now.subtract(Duration(days: 7)).day;
-        endNumber = now.day;
-        break;
-      case "month":
-        startNumber = now.subtract(Duration(days: 30)).month;
-        endNumber = now.month;
-        break;
-      case "year":
-        startNumber = now.subtract(Duration(days: 365)).year;
-        endNumber = now.year;
-        break;
-    }
-    return (startNumber, endNumber);
-  }
-
-  num getChartTimeStamp(int timeStamp){
-    late num convertedTime;
-    switch(mode){
-      case "day":
-        convertedTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).hour + (1/60)*DateTime.fromMillisecondsSinceEpoch(timeStamp).minute;
-        break;
-      case "week":
-        convertedTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).day+(1/24)*DateTime.fromMillisecondsSinceEpoch(timeStamp).hour+(1/1440)*DateTime.fromMillisecondsSinceEpoch(timeStamp).minute;
-        break;
-      case "month":
-        convertedTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).day+(1/24)*DateTime.fromMillisecondsSinceEpoch(timeStamp).hour+(1/1440)*DateTime.fromMillisecondsSinceEpoch(timeStamp).minute;
-        break;
-      case "year":
-        convertedTime = DateTime.fromMillisecondsSinceEpoch(timeStamp).month+(1/31)*DateTime.fromMillisecondsSinceEpoch(timeStamp).day+(1/744)*DateTime.fromMillisecondsSinceEpoch(timeStamp).hour+(1/44640)*DateTime.fromMillisecondsSinceEpoch(timeStamp).hour+(1/1440)*DateTime.fromMillisecondsSinceEpoch(timeStamp).minute;
-        break;
-
-    }
-    return convertedTime;
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<charts.Series<Measurement, num>> series = [
-      charts.Series(
-        id: "developers",
-        data: dataList,
-        domainFn: (Measurement series, _) => DateTime.fromMillisecondsSinceEpoch(series.timeStamp).hour + (1/60)*DateTime.fromMillisecondsSinceEpoch(series.timeStamp).minute,
-        measureFn: (Measurement series, _) => series.measurementValue,
-        //colorFn: (DeveloperSeries series, _) => series.barColor
-      )
-    ];
 
-    return charts.LineChart(series, domainAxis: const charts.NumericAxisSpec(
-                 tickProviderSpec:
-                 charts.BasicNumericTickProviderSpec(zeroBound: false),
-                 viewport: charts.NumericExtents(0, 24),
-           ), animate: true);
+    //Selects the displayed interval on the x axis of the graph
+    late DateTimeIntervalType graphInterval;
+    //Selects which graph title is displayed at the top of  the graph
+    late String graphTitle;
+    late String graphTitleTime;
+
+    //Uses a switch statement to set the time part of the title and display interval
+    switch(mode){
+      case "Dag":
+        graphInterval = DateTimeIntervalType.hours;
+        graphTitleTime = '24 uur';
+        break;
+      case "Week":
+        graphInterval = DateTimeIntervalType.days;
+        graphTitleTime = 'week';
+        break;
+      case "Maand":
+        graphInterval = DateTimeIntervalType.days;
+        graphTitleTime = 'maand';
+        break;
+      case "Jaar":
+        graphInterval = DateTimeIntervalType.months;
+        graphTitleTime = 'jaar';
+        break;
+      default:
+        graphInterval = DateTimeIntervalType.hours;
+        graphTitleTime = '24 uur';
+    }
+
+    //Uses a switch statement to set the correct title depending on which variable should be displayed
+    switch(element){
+      case "Temperatuur":
+        graphTitle = 'Temperatuur afgelopen ';
+        break;
+      case "Luchtvochtigheid":
+        graphTitle = 'Luchtvochtigheid afgelopen ';
+        break;
+      case "Grondwater niveau":
+        graphTitle = 'Grondwater niveau afgelopen ';
+        break;
+      case "Reservoir":
+        graphTitle = 'Reservoir waterniveau afgelopen ';
+        break;
+      case "Licht":
+        graphTitle = 'Licht niveau afgelopen ';
+        break;
+      default:
+        graphTitle = 'Temperatuur afgelopen ';
+    }
+
+    //Makes a linechart visualising all the given data entries
+    return SfCartesianChart(
+      primaryXAxis: DateTimeAxis(intervalType: graphInterval),
+      title: ChartTitle(text: graphTitle+graphTitleTime),
+      tooltipBehavior: TooltipBehavior(enable: true),
+      legend: Legend(isVisible: false),
+      //Uses the given order of the data entries to make the line of the chart
+      series: <LineSeries<Measurement, DateTime>>[
+        LineSeries<Measurement, DateTime>(
+          dataSource: dataList,
+          xValueMapper: (Measurement series, _) => series.timeStamp,
+          yValueMapper: (Measurement series, _) => series.measurementValue,
+          name: element,
+          color: Theme.of(context).colorScheme.primary,
+        )
+      ],
+      
+    );
   }
 
 }
