@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:sqflite/sqflite.dart';
 
 class PlantPage extends StatefulWidget {
   const PlantPage({super.key, required this.activePlantInformation});
@@ -13,15 +14,21 @@ class PlantPage extends StatefulWidget {
 class _PlantPageState extends State<PlantPage> {
   @override
   Widget build(BuildContext context) {
+    QueryWaterniveau();
+    QueryLuchtvochtigheid();
+    QueryTemperatuur();
+    QueryBodemvocht();
+    QueryLichtniveau();
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     /*
-    print("Naam: ${widget.activePlantInformation[0]}");
+    print("Naam: ${widget.activePlantInformation[1]}");
     print("Wetenschappelijke naam: ${widget.activePlantInformation[2]}");
-    print("Locatie: ${widget.activePlantInformation[2]}");
+    print("Locatie: ${widget.activePlantInformation[0]}");
     print("Fotolocatie: ${widget.activePlantInformation[3]}");
     */
-
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -234,3 +241,63 @@ class _PlantPageState extends State<PlantPage> {
     );
   }
 }
+
+void QueryWaterniveau() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT waterniveau, tijd FROM dogs');
+    print('Done waterniveau');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryLichtniveau() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT lichtniveau, tijd FROM dogs');
+    print('Done lichtniveau');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryTemperatuur() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT temperatuur, tijd FROM dogs');
+    print('Done temperatuur');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryBodemvocht() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT bodemvocht, tijd FROM dogs');
+    print('Done bodemvocht');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+void QueryLuchtvochtigheid() async {
+  final db = await openDatabase('doggie_database.db');
+
+  try {
+    List<Map> list = await db.rawQuery('SELECT luchtvochtigheid, tijd FROM dogs');
+    print('Done luchtvochtigheid');
+  } catch (Exception) {
+    print('An error occurred!');
+  }
+}
+
+
+
+
+

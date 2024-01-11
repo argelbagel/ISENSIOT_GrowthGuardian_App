@@ -4,10 +4,136 @@ import 'package:growth_guardian/views/homePage.dart';
 import 'package:growth_guardian/views/plantPage.dart';
 import 'package:growth_guardian/views/problemPage.dart';
 import 'dart:io';
+import "package:dart_amqp/dart_amqp.dart";
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
-void main() {
+void main() async {
+  //Code for the database
+
+  print('Database maken'); 
+  // Avoid errors caused by flutter upgrade.
+  // Importing 'package:flutter/widgets.dart' is required.
+  WidgetsFlutterBinding.ensureInitialized();
+  // Open the database and store the reference.
+  final database = openDatabase(
+    // Set the path to the database. Note: Using the `join` function from the
+    // `path` package is best practice to ensure the path is correctly
+    // constructed for each platform.
+    join(await getDatabasesPath(), 'doggie_database.db'),
+    // When the database is first created, create a table to store dogs.
+    onCreate: (db, version) {
+      // Run the CREATE TABLE statement on the database.
+      return db.execute(
+        'CREATE TABLE dogs(id INTEGER PRIMARY KEY, naam TEXT, waterniveau INTEGER, lichtniveau INTEGER, temperatuur INTEGER, bodemvocht INTEGER, luchtvochtigheid INTEGER, tijd INTEGER)',
+      );
+    },
+    // Set the version. This executes the onCreate function and provides a
+    // path to perform database upgrades and downgrades.
+    version: 1,
+  );
+
+  // Define a function that inserts dogs into the database
+  Future<void> insertDog(Dog dog) async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Insert the Dog into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same dog is inserted twice.
+    //
+    // In this case, replace any previous data.
+    await db.insert(
+      'dogs',
+      dog.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // A method that retrieves all the dogs from the dogs table.
+  Future<List<Dog>> dogs() async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db.query('dogs');
+
+    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    return List.generate(maps.length, (i) {
+      return Dog(
+        id: maps[i]['id'] as int,
+        naam: maps[i]['naam'] as String,
+        waterniveau: maps[i]['waterniveau'] as int,
+        lichtniveau: maps[i]['lichtniveau'] as int,
+        temperatuur: maps[i]['temperatuur'] as int,
+        bodemvocht: maps[i]['bodemvocht'] as int,
+        luchtvochtigheid: maps[i]['luchtvochtigheid'] as int,
+        tijd: maps[i]['tijd'] as int,
+      );
+    });
+  }
+
+  int tijd() {
+    Duration timeZoneOffset = Duration(hours: 1);
+    DateTime gmtPlusOne = DateTime.now().add(timeZoneOffset);
+    int epochTime = gmtPlusOne.millisecondsSinceEpoch;
+    return epochTime;
+  }
+
+  ConnectionSettings settings = ConnectionSettings(
+    host: "145.101.75.2", //89.205.131.42, 192.168.94.218, localhost, 192.168.56.1
+    port: 5672,
+    authProvider: const PlainAuthenticator('harige_harry', 'harige_harry'), //mqtt-test, guest, harige_harry
+  );
+
+  Client client = Client(settings: settings);
+
+  ProcessSignal.sigint.watch().listen((_) {
+    client.close().then((_) {
+      print("close client");
+      exit(0);
+    });
+  });
+
+  List<String> routingKeys = ["#"];
+
+
+  client.channel().then((Channel channel) {
+    print('Setting the exchange');
+    return channel.exchange("sensordata", ExchangeType.TOPIC, durable: false); //amq.topic, voor sensoren > durable true
+  }).then((Exchange exchange) {
+    print("[*] Waiting for messages in logs. To Exit press CTRL+C");
+    return exchange.bindPrivateQueueConsumer(
+      routingKeys,
+      consumerTag: "APP-GrowthGuardian", noAck: true
+    );
+  })
+  .then((Consumer consumer) {
+    consumer.listen((AmqpMessage event) async {
+      //print("${event.routingKey};${event.payloadAsString}");
+      String data = '${event.payloadAsString}';
+
+      List<String> keyValuePairs = data.split(',');
+
+      var sensordata = Dog(
+        id: int.parse(keyValuePairs[1]),
+        naam: "${event.routingKey}",
+        waterniveau: int.parse(keyValuePairs[3]), 
+        lichtniveau: int.parse(keyValuePairs[5]), 
+        temperatuur: int.parse(keyValuePairs[7]), 
+        bodemvocht: int.parse(keyValuePairs[9]), 
+        luchtvochtigheid: int.parse(keyValuePairs[11]),
+        tijd: tijd(),
+      );
+      
+      //print('Inserting data');
+      await insertDog(sensordata);
+    });
+  });
+
   runApp(const GrowthGuardianApp());
+
 }
 
 //This class is used to arrange local storage of plant profiles
@@ -227,4 +353,49 @@ class GrowthGuardianColorScheme extends ColorScheme{
     	// such as background, surface, onBackground, etc.
     
     	}) : super(brightness: Brightness.light, primary: primary, secondary: secondary, background: background, onPrimary: onPrimary, onSecondary: onSecondary, onBackground: onBackground, surface: surface, onSurface: onSurface, error: error, onError: onError);
+}
+
+// Database columns
+class Dog {
+  final int id;
+  final String naam;
+  final int waterniveau;
+  final int lichtniveau;
+  final int temperatuur;
+  final int bodemvocht;
+  final int luchtvochtigheid;
+  final int tijd;
+
+  const Dog({
+    required this.id,
+    required this.naam,
+    required this.waterniveau,
+    required this.lichtniveau,
+    required this.temperatuur,
+    required this.bodemvocht,
+    required this.luchtvochtigheid,
+    required this.tijd,
+  });
+
+  // Convert a Dog into a Map. The keys must correspond to the names of the
+  // columns in the database.
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'naam': naam,
+      'waterniveau': waterniveau,
+      'lichtniveau': lichtniveau,
+      'temperatuur': temperatuur,
+      'bodemvocht': bodemvocht,
+      'luchtvochtigheid': luchtvochtigheid,
+      'tijd': tijd,
+    };
+  }
+
+  // Implement toString to make it easier to see information about
+  // each dog when using the print statement.
+  @override
+  String toString() {
+    return 'Dog{id: $id, naam: $naam, waterniveau: $waterniveau, lichtniveau: $lichtniveau, temperatuur: $temperatuur, bodemvocht: $bodemvocht, luchtvochtigheid: $luchtvochtigheid}';
+  }
 }
