@@ -5,66 +5,65 @@ import 'package:growth_guardian/widget/plantPageLineChart.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PlantPage extends StatefulWidget {
-  const PlantPage({super.key, required this.activePlantInformation});
+  const PlantPage({super.key, required this.activePlantInformation, required this.activePlantStats});
 
   final List<String> activePlantInformation;
+
+  final Map<String,dynamic> activePlantStats;
 
   @override
   State<PlantPage> createState() => _PlantPageState();
 }
 
 class _PlantPageState extends State<PlantPage> {
-  //temp dataseries dummy database data voor graph testen, delete later
-  final List<Measurement> temperatuurData = [
-    Measurement(timeStamp: DateTime.parse('2024-01-08 10:00:00Z'), measurementValue: 19),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 11:00:00Z'), measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 12:00:00Z'), measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 13:00:00Z'), measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 14:00:00Z'), measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 15:00:00Z'), measurementValue: 19),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 16:00:00Z'), measurementValue: 18),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 17:00:00Z'), measurementValue: 18),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 18:00:00Z'), measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 19:00:00Z'), measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 20:00:00Z'), measurementValue: 23),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 21:00:00Z'), measurementValue: 22),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 22:00:00Z'), measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-08 23:00:00Z'), measurementValue: 21),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 00:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 01:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 02:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 03:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 04:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 05:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 06:00:00Z'), measurementValue: 3),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 07:00:00Z'), measurementValue: 8),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 08:00:00Z'), measurementValue: 13),
-    Measurement(timeStamp: DateTime.parse('2024-01-09 09:00:00Z'), measurementValue: 16),
-  ];
-
   //Creates the state variables and gives them defaults
-  String mode = "Dag";
+  String mode = "Maand";
   String element = "Temperatuur";
+  //State datalist that gets initialised in the initialiser and can get updated by the changeActiveData function
+  List<Measurement> activeData = [];
+  //constants that declare which database and table therin is being used, can be made dynamic later if multiple options get introduced
+  final String database = 'doggie_database.db';
+  final String table = 'dogs';
+  final String plantName = "plantenpot";
+
+  @override
+  void initState() {
+    super.initState();
+    
+    changeActiveData(element,mode);
+  }
+
+  void changeActiveData(String element, String mode){
+    //Change plantName to the correct part of activePlantInformation when proper data starts being used
+    QueryDatabase(database, table, element, mode, plantName).then((value){
+      List<Measurement> newData = [];
+      for(var i in value){
+        newData.add(Measurement(timeStamp: DateTime.fromMillisecondsSinceEpoch(i["tijd"]), measurementValue: i[convertAppElementToDatabaseElement(element)]));
+      }
+      // print(newData[0].timeStamp);
+      // print(newData[19].timeStamp);
+      setState(() {
+        activeData = newData;
+      });
+    });
+  }
 
   void changeMode(String modeValue){
     setState(() {
       mode = modeValue;
     });
+    changeActiveData(element,mode);
   }
 
   void changeElement(String elementValue){
     setState(() {
       element = elementValue;
     });
+    changeActiveData(element,mode);
   }
 
   @override
   Widget build(BuildContext context) {
-    QueryWaterniveau();
-    QueryLuchtvochtigheid();
-    QueryTemperatuur();
-    QueryBodemvocht();
-    QueryLichtniveau();
 
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -204,27 +203,27 @@ class _PlantPageState extends State<PlantPage> {
                   Row(
                     children: [
                       elementTextButton(currentElement: element, buttonElement: "Temperatuur", changeElement: changeElement),
-                      Text(' ...'),
+                      Text(widget.activePlantStats["temperatuur"].toString()),
                       Spacer(),
                       elementTextButton(currentElement: element, buttonElement: "Luchtvochtigheid", changeElement: changeElement),
-                      Text('...'),
+                      Text(widget.activePlantStats["luchtvochtigheid"].toString()),
                     ],
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
                       elementTextButton(currentElement: element, buttonElement: "Grondwater niveau", changeElement: changeElement),
-                      Text('...'),
+                      Text(widget.activePlantStats["bodemvocht"].toString()),
                       Spacer(),
                       elementTextButton(currentElement: element, buttonElement: "Reservoir", changeElement: changeElement),
-                      Text('...'),
+                      Text(widget.activePlantStats["waterniveau"].toString()),
                     ],
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
                       elementTextButton(currentElement: element, buttonElement: "Licht", changeElement: changeElement),
-                      Text('...'),
+                      Text(widget.activePlantStats["lichtniveau"].toString()),
                     ],
                   ),
                 ],
@@ -238,7 +237,7 @@ class _PlantPageState extends State<PlantPage> {
                   Container(
                     width: 350,
                     height: 150,
-                    child: PlantPageLineChart(dataList: temperatuurData, mode:mode, element: element,),
+                    child: PlantPageLineChart(dataList: activeData, mode:mode, element: element,),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -356,57 +355,69 @@ class intervalButton extends StatelessWidget {
   }
 }
 
-void QueryWaterniveau() async {
-  final db = await openDatabase('doggie_database.db');
-
-  try {
-    List<Map> list = await db.rawQuery('SELECT waterniveau, tijd FROM dogs');
-    print('Done waterniveau');
-  } catch (Exception) {
-    print('An error occurred!');
+String convertAppElementToDatabaseElement(element){
+  switch(element){
+      case "Temperatuur":
+        return "temperatuur";
+      case "Luchtvochtigheid":
+        return"luchtvochtigheid";
+      case "Grondwater niveau":
+        return "bodemvocht";
+      case "Reservoir":
+        return "waterniveau";
+      case "Licht":
+        return "lichtniveau";
+      default:
+        return "temperatuur";
   }
 }
 
-void QueryLichtniveau() async {
-  final db = await openDatabase('doggie_database.db');
+Future<List<Map>> QueryDatabase(String database, String table, String element, String mode, String plantName) async{
+  final db = await openDatabase(database);
 
+  plantName = "\"" + plantName + "\"";
+
+  //First sets up the varius parts of the query that are constant and variable to splice the desired query together
+  late String queryWhatPart;
+  String queryWhatPart1 = "SELECT ";
+  String queryWhatPart2 = ", tijd FROM " + table;
+
+  late int startOfRecords;
+  DateTime now = DateTime.now();
+  late String finalQuery;
+
+  //Makes the first part of the query where a specific element is grabbed from the database
+  queryWhatPart = queryWhatPart1 + convertAppElementToDatabaseElement(element) + queryWhatPart2;
+
+  //Selects the time from which we want to display the data
+  switch(mode){
+      case "Dag":
+        startOfRecords = DateTime(now.year, now.month, now.day-1, now.hour, now.minute).millisecondsSinceEpoch;
+        break;
+      case "Week":
+        startOfRecords = DateTime(now.year, now.month, now.day-7, now.hour, now.minute).millisecondsSinceEpoch;
+        break;
+      case "Maand":
+        startOfRecords = DateTime(now.year, now.month-1, now.day, now.hour, now.minute).millisecondsSinceEpoch;
+        break;
+      case "Jaar":
+        startOfRecords = DateTime(now.year-1, now.month, now.day, now.hour, now.minute).millisecondsSinceEpoch;
+        break;
+      default:
+        startOfRecords = DateTime(now.year, now.month, now.day-1, now.hour, now.minute).millisecondsSinceEpoch;
+    }
+
+    //Splices the parts together into a single string which will be used as query
+    finalQuery = queryWhatPart + " WHERE tijd > " + startOfRecords.toString()+ " AND naam = " + plantName + " ORDER BY tijd ASC";
+    //print(finalQuery);
   try {
-    List<Map> list = await db.rawQuery('SELECT lichtniveau, tijd FROM dogs');
-    print('Done lichtniveau');
+    List<Map> list = await db.rawQuery(finalQuery);
+    //print(list);
+    print('Done ' + element + " " + mode);
+    return list;
   } catch (Exception) {
     print('An error occurred!');
+    return [];
   }
-}
 
-void QueryTemperatuur() async {
-  final db = await openDatabase('doggie_database.db');
-
-  try {
-    List<Map> list = await db.rawQuery('SELECT temperatuur, tijd FROM dogs');
-    print('Done temperatuur');
-  } catch (Exception) {
-    print('An error occurred!');
-  }
-}
-
-void QueryBodemvocht() async {
-  final db = await openDatabase('doggie_database.db');
-
-  try {
-    List<Map> list = await db.rawQuery('SELECT bodemvocht, tijd FROM dogs');
-    print('Done bodemvocht');
-  } catch (Exception) {
-    print('An error occurred!');
-  }
-}
-
-void QueryLuchtvochtigheid() async {
-  final db = await openDatabase('doggie_database.db');
-
-  try {
-    List<Map> list = await db.rawQuery('SELECT luchtvochtigheid, tijd FROM dogs');
-    print('Done luchtvochtigheid');
-  } catch (Exception) {
-    print('An error occurred!');
-  }
 }

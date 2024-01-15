@@ -3,7 +3,6 @@ import 'package:growth_guardian/views/addPage.dart';
 import 'package:growth_guardian/views/homePage.dart';
 import 'package:growth_guardian/views/plantPage.dart';
 import 'package:growth_guardian/views/problemPage.dart';
-import 'package:growth_guardian/views/secretTestView.dart';
 import 'dart:io';
 import "package:dart_amqp/dart_amqp.dart";
 import 'package:sqflite/sqflite.dart';
@@ -13,8 +12,8 @@ import 'package:path/path.dart';
 
 void main() async {
   //Code for the database
-
-  print('Database maken'); 
+  print('Database maken');
+  //print(await getDatabasesPath()); 
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +23,7 @@ void main() async {
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
     join(await getDatabasesPath(), 'doggie_database.db'),
+
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
@@ -243,6 +243,29 @@ class _LandingPageState extends State<LandingPage> {
   //Active plant
   List<String> activePlantInformation = ['kelder', 'kelderplant', 'klederusplantus', 'locatie']; 
 
+  Map<String, dynamic> activePlantStats = {};
+
+  final String database = "doggie_database.db";
+  final String table = "dogs";
+
+  final String testPlantName = "plantenpot";
+
+  @override
+  void initState() {
+    super.initState();
+
+    changeActivePlantStats(testPlantName);
+  }
+
+  void changeActivePlantStats(String plantName){
+    //Grabs the latest entry of a plant and updates the state variable to be send to the plant page
+    getLatestPlantInfo(database,table,plantName).then((newPlantInfo){
+      setState(() {
+        activePlantStats = newPlantInfo;
+      });
+    });
+  }
+
   @override
   void dispose() {
     page_controller.dispose();
@@ -289,9 +312,8 @@ class _LandingPageState extends State<LandingPage> {
         children: [
           HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage,),
           ProblemPage(switchToPlantPage: switchToPlantPage,),
-          PlantPage(activePlantInformation: activePlantInformation,),
-          // AddPage(storage: PlantStorage(), goToPage: goToPage,),
-          Test(),    
+          PlantPage(activePlantInformation: activePlantInformation, activePlantStats: activePlantStats,),
+          AddPage(storage: PlantStorage(), goToPage: goToPage,),
         ]
       ),
       //Below every page is the navigationbar to allow navigation and tell the user where they are
@@ -403,5 +425,22 @@ class Dog {
   @override
   String toString() {
     return 'Dog{id: $id, naam: $naam, waterniveau: $waterniveau, lichtniveau: $lichtniveau, temperatuur: $temperatuur, bodemvocht: $bodemvocht, luchtvochtigheid: $luchtvochtigheid}';
+  }
+}
+
+Future<Map<String, dynamic>> getLatestPlantInfo(String database, String table, String plantName) async{
+  final db = await openDatabase(database);
+
+  plantName = "\"" + plantName + "\"";
+  //grabs the latest record in the given table for the given plant
+  String query = "SELECT * FROM "+ table + " WHERE naam = " + plantName + " ORDER BY tijd DESC LIMIT 1";
+
+  try {
+    List<Map<String,dynamic>> list = await db.rawQuery(query);
+    print('Done ' + plantName);
+    return list[0];
+  } catch (Exception) {
+    print('An error occurred!');
+    return {};
   }
 }
