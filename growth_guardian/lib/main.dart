@@ -3,13 +3,13 @@ import 'package:growth_guardian/views/addPage.dart';
 import 'package:growth_guardian/views/homePage.dart';
 import 'package:growth_guardian/views/plantPage.dart';
 import 'package:growth_guardian/views/problemPage.dart';
-import 'package:growth_guardian/views/secretTestView.dart';
 import 'dart:io';
 import "package:dart_amqp/dart_amqp.dart";
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:postgres/postgres.dart';
 
 void main() async {
   //Code for the database
@@ -81,7 +81,7 @@ void main() async {
     int epochTime = gmtPlusOne.millisecondsSinceEpoch;
     return epochTime;
   }
-
+  /*
   ConnectionSettings settings = ConnectionSettings(
     host: "145.101.75.2", //89.205.131.42, 192.168.94.218, localhost, 192.168.56.1
     port: 5672,
@@ -132,6 +132,12 @@ void main() async {
       await insertDog(sensordata);
     });
   });
+  */
+
+  get_data_from_postgresql_server();
+
+  //final result = await conn.execute("SELECT 'foo'");
+  //print(result[0][0]); // first row and first field
 
   runApp(const GrowthGuardianApp());
 
@@ -290,8 +296,7 @@ class _LandingPageState extends State<LandingPage> {
           HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage,),
           ProblemPage(switchToPlantPage: switchToPlantPage,),
           PlantPage(activePlantInformation: activePlantInformation,),
-          // AddPage(storage: PlantStorage(), goToPage: goToPage,),
-          Test(),    
+          AddPage(storage: PlantStorage(), goToPage: goToPage,),  
         ]
       ),
       //Below every page is the navigationbar to allow navigation and tell the user where they are
@@ -404,4 +409,19 @@ class Dog {
   String toString() {
     return 'Dog{id: $id, naam: $naam, waterniveau: $waterniveau, lichtniveau: $lichtniveau, temperatuur: $temperatuur, bodemvocht: $bodemvocht, luchtvochtigheid: $luchtvochtigheid}';
   }
+}
+
+void get_data_from_postgresql_server() async {
+  final conn = await Connection.open(Endpoint(
+    host: '136.144.163.112',
+    database: 'sensordata',
+    username: 'postgres',
+    password: 'postgres',
+  ));
+
+  final result = await conn.execute("SELECT * FROM sensordata_table");
+  for(var r in result) {
+    print(r);
+  }
+
 }
