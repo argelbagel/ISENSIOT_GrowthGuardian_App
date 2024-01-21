@@ -4,6 +4,11 @@ import 'package:camera/camera.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io' as io;
 import '../main.dart' show PlantStorage;
+import 'package:growth_guardian/widget/clasifier.dart';
+import 'dart:typed_data';
+import 'dart:convert';
+import 'package:image/image.dart' as img;
+import 'dart:math';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key, required this.storage, required this.goToPage});
@@ -17,6 +22,10 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   String imagePath = "";
+  late img.Image takenPicture;
+
+  bool pictureActive = false;
+
   String plantWetenschappelijk = 'Wetenschappelijke naam';
 
   CameraController? _cameraController;
@@ -46,6 +55,34 @@ class _AddPageState extends State<AddPage> {
       });
     }
   }
+
+  Future<void> takePicture() async{
+    try {
+      final image = await _cameraController!.takePicture();
+      String picturePath = image.path;
+      await cropSquare(picturePath, picturePath, false);
+      img.Image convertedImage = img.decodeImage(await File(picturePath).readAsBytes())!;
+      
+      // CameraImage temp = image;
+      // img.Image? convertedImage = await img.decodeImageFile(image.path);
+      print("taken picture");
+      setState(() {
+        imagePath = picturePath;
+        takenPicture = convertedImage;
+        pictureActive = true;
+      });
+      String prediction =  await classifyImage(takenPicture);
+      setState(() {
+        plantWetenschappelijk = prediction;
+      });
+      
+    } 
+    catch (e) {
+      print(e);
+    }
+  }
+
+
 
   @override
   void dispose() {
@@ -83,7 +120,9 @@ class _AddPageState extends State<AddPage> {
                     ],
                   ),
                   
-                  child: cameraInitialised
+                  child: pictureActive
+                  ? Image(image: FileImage(File(imagePath)))
+                  : cameraInitialised
                   ? CameraPreview(_cameraController!)
                   : Center(child: CircularProgressIndicator())
                   // FutureBuilder<void>(
@@ -99,18 +138,25 @@ class _AddPageState extends State<AddPage> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(10.0),
-            //   child: Text(
-            //     '$plantWetenschappelijk',
-            //     style: TextStyle(
-            //       fontSize: 12.0,
-            //       color: Theme.of(context).colorScheme.onSurface,
-            //     ),
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Text(
+                    '$plantWetenschappelijk',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  IconButton(onPressed: (){
+                    takePicture();
+                  }, icon: Icon(Icons.add_a_photo))
+                ],
+              ),
+            ),
             addTextField(fieldController: _plantNaam, labelText: 'Geef de plant een herkenbare naam',),
-            addTextField(fieldController: _plantSoort, labelText: 'Wat voor soort plant is het?',),
+            // addTextField(fieldController: _plantSoort, labelText: 'Wat voor soort plant is het?',),
             addTextField(fieldController: _plantLocatie, labelText: 'Waar staat de plant in het huis?',),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -192,16 +238,7 @@ class _AddPageState extends State<AddPage> {
                         );
                       } 
                       else {
-                        try {
-                          final image = await _cameraController!.takePicture();
-                          setState(() {
-                            imagePath = image.path;
-                          });
-                        } 
-                        catch (e) {
-                          print(e);
-                        }
-  
+                        
                         print('Original path: ${imagePath}');
                         String dir = path.dirname(imagePath);
                         String newFile = path.join(dir, _plantLocatie.text, '_${_plantNaam.text.toLowerCase()}.jpg');
@@ -293,6 +330,27 @@ class addTextField extends StatelessWidget {
       ),
     );
   }
+}
+
+Future cropSquare(String srcFilePath, String destFilePath, bool flip) async {
+  var bytes = await File(srcFilePath).readAsBytes();
+  img.Image src = img.decodeImage(bytes)!;
+
+  src = img.copyRotate(src, 90);
+
+  var cropSize = min(src.width, src.height);
+  int offsetX = (src.width - min(src.width, src.height)) ~/ 2;
+  int offsetY = (src.height - min(src.width, src.height)) ~/ 2;
+
+  img.Image destImage =
+    img.copyCrop(src, offsetX, offsetY, cropSize, cropSize);
+
+  if (flip) {
+      destImage = img.flipVertical(destImage);
+  }
+
+  var jpg = img.encodeJpg(destImage);
+  await File(destFilePath).writeAsBytes(jpg);
 }
 
 /*
