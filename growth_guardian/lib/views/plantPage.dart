@@ -5,11 +5,12 @@ import 'package:growth_guardian/widget/plantPageLineChart.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PlantPage extends StatefulWidget {
-  const PlantPage({super.key, required this.activePlantInformation, required this.activePlantStats});
+  const PlantPage({super.key, required this.activePlantInformation, required this.activePlantStats, required this.idealEnvironmentPerSpecies});
 
   final List<String> activePlantInformation;
 
   final Map<String,dynamic> activePlantStats;
+  final Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies;
 
   @override
   State<PlantPage> createState() => _PlantPageState();
@@ -25,6 +26,10 @@ class _PlantPageState extends State<PlantPage> {
   final String database = 'doggie_database.db';
   final String table = 'dogs';
   final String plantName = "plantenpot";
+
+  String idealTemp = "...";
+  String idealHumid = "...";
+  String idealLight = "...";
 
   @override
   void initState() {
@@ -45,6 +50,15 @@ class _PlantPageState extends State<PlantPage> {
       setState(() {
         activeData = newData;
       });
+    });
+  }
+
+  void setIdealValues(){
+    final speciesInfo = widget.idealEnvironmentPerSpecies[widget.activePlantInformation[2]]!;
+    setState(() {
+      idealTemp = speciesInfo["temperatuurMin"].toString() + " - " + speciesInfo["temperatuurMax"].toString() + " C";
+      idealHumid = speciesInfo["luchtvochtigheidMin"].toString() + " - " + speciesInfo["luchtvochtigheidMax"].toString() + " %";
+      idealLight = speciesInfo["lichtintensiteitMin"].toString() + " - " + speciesInfo["lichtintensiteitMax"].toString() + " Lux";
     });
   }
 
@@ -267,7 +281,7 @@ class _PlantPageState extends State<PlantPage> {
                     child: Row(
                       children: [
                         Text('Temperatuur: '),
-                        Text('...'),
+                        Text(idealTemp),
                       ],
                     ),
                   ),
@@ -276,7 +290,7 @@ class _PlantPageState extends State<PlantPage> {
                     child: Row(
                       children: [
                         Text('Luchtvochtigheid: '),
-                        Text('...'),
+                        Text(idealHumid),
                       ],
                     ),
                   ),
@@ -285,7 +299,7 @@ class _PlantPageState extends State<PlantPage> {
                     child: Row(
                       children: [
                         Text('Lichtniveau: '),
-                      Text('...'),
+                      Text(idealLight),
                     ],
                   ),
                 ),
