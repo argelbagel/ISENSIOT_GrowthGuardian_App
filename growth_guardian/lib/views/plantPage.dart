@@ -36,6 +36,7 @@ class _PlantPageState extends State<PlantPage> {
     super.initState();
     
     changeActiveData(element,mode);
+    setIdealValues();
   }
 
   void changeActiveData(String element, String mode){
@@ -55,6 +56,7 @@ class _PlantPageState extends State<PlantPage> {
 
   void setIdealValues(){
     final speciesInfo = widget.idealEnvironmentPerSpecies[widget.activePlantInformation[2]]!;
+    print(speciesInfo);
     setState(() {
       idealTemp = speciesInfo["temperatuurMin"].toString() + " - " + speciesInfo["temperatuurMax"].toString() + " C";
       idealHumid = speciesInfo["luchtvochtigheidMin"].toString() + " - " + speciesInfo["luchtvochtigheidMax"].toString() + " %";

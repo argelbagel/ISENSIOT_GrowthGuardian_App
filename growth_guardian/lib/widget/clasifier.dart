@@ -42,7 +42,7 @@ Future<String> classifyImage(img.Image image) async{
 Future<http.Response> classifyImageRequest(dynamic convertedImage) async{
   print("Getting post thingy");
   return http.post(
-    Uri.parse("http://192.168.1.190:8501/v1/models/plantModel:predict"),
+    Uri.parse("http://10.0.2.2:8501/v1/models/plantModel:predict"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
