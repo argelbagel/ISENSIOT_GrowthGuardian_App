@@ -14,7 +14,7 @@ class card extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     List<String> plantNamesList = plantNames.split(",");
-    if(plantNamesList.length<3){
+    if(plantNamesList.length<4){
       plantNamesList.add("");
     }
 
@@ -22,7 +22,7 @@ class card extends StatelessWidget {
     
     return GestureDetector(
       onTap: () {
-        switchToPlantPage(roomName, plantNamesList[0], plantNamesList[1], dirFoto);
+        switchToPlantPage(roomName, plantNamesList[0], plantNamesList[1], dirFoto, plantNamesList[2]);
       },
 
       //switchToPlantPage(roomName, plantNamesList[0], plantNamesList[0], dirFoto);
@@ -74,7 +74,7 @@ class card extends StatelessWidget {
                         children: [
                           Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[0], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,),))),
                           Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[1], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,),))),
-                          Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[2], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.error,),))),
+                          Container(child: Align(alignment: Alignment.centerLeft,child: Text(plantNamesList[3], textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).colorScheme.error,),))),
                         ],
                       )
                     ),

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:growth_guardian/widget/cart.dart';
 
 class ProblemPage extends StatefulWidget {
-  const ProblemPage({super.key, required this.switchToPlantPage});
+  const ProblemPage({super.key, required this.switchToPlantPage, required this.warnings});
 
   final Function switchToPlantPage;
+
+  final List<String> warnings;
 
   @override
   State<ProblemPage> createState() => _ProblemPageState();
@@ -13,7 +15,7 @@ class ProblemPage extends StatefulWidget {
 class _ProblemPageState extends State<ProblemPage> {
   //For now the warning system is only implemented as the internal structure
   //Replace later once they can actually be generated
-  List<String> warnings = ["Woonkamer;Hoekplant,Luchtvochtigheid te hoog;Vette plant,Krijgt te veel zonlicht","Badkamer;Vette plant,Krijgt te veel zonlicht"];
+  // List<String> warnings = ["Woonkamer;Hoekplant,Luchtvochtigheid te hoog;Vette plant,Krijgt te veel zonlicht","Badkamer;Vette plant,Krijgt te veel zonlicht"];
   //List<String> warnings = [];
 
   //Since warnings cant be dynamically generated yet this cant be esteblished yet
@@ -27,7 +29,7 @@ class _ProblemPageState extends State<ProblemPage> {
     List<String> allWarnings = [];
     
     //splits the warnings so they can be put back in the right order with the room inserted into them
-    for(String roomWarnings in warnings){
+    for(String roomWarnings in widget.warnings){
       List<String> allInRoom = roomWarnings.split(";");
       for(int i = 1;i<allInRoom.length;i++){
         List<String> warningSplit = allInRoom[i].split(",");
@@ -38,7 +40,7 @@ class _ProblemPageState extends State<ProblemPage> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () => refresh(),
-        child: warnings.isEmpty
+        child: widget.warnings.isEmpty
           ? ListView(children: const [
               Padding(
                 padding: EdgeInsets.only(top: 16.0),

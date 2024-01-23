@@ -173,7 +173,7 @@ class PlantStorage {
   }
 
   //The addPlant function takes the existing profile and adds a new plant to the correct location therein
-  Future<File> addPlant(String room, String name, String scientificName) async {
+  Future<File> addPlant(String room, String name, String scientificName, String plantCode) async {
     final file = await _localFile;
         
     //Calls for the existing storage string and waits until its recieved to actually add the plant to the file
@@ -188,7 +188,7 @@ class PlantStorage {
       debugPrint(currentContent[i].toLowerCase());
       if(currentContent[i].toLowerCase().contains(room.toLowerCase())){
         if(!currentContent[i].contains(name)){
-          currentContent[i] = currentContent[i]+";"+name+","+scientificName;
+          currentContent[i] = currentContent[i]+";"+name+","+scientificName+","+plantCode;
         }
         added = true;
       }
@@ -196,7 +196,7 @@ class PlantStorage {
 
     //If the given room does not already exists the function adds the plant and room to the end of the current string
     if(!added){
-      currentContent.add(room+";"+name+","+scientificName);
+      currentContent.add(room+";"+name+","+scientificName+","+plantCode);
     }
 
     // Write the file
@@ -241,20 +241,87 @@ class _LandingPageState extends State<LandingPage> {
   int selectedPage = 0;
 
   //Active plant
-  List<String> activePlantInformation = ['kelder', 'kelderplant', 'klederusplantus', 'locatie']; 
+  List<String> activePlantInformation = ['kelder', 'kelderplant', 'Narcissus papyraceus', 'locatie', 'cooleCode']; 
 
   Map<String, dynamic> activePlantStats = {};
+
+  List<String> warnings = [];
 
   final String database = "doggie_database.db";
   final String table = "dogs";
 
   final String testPlantName = "plantenpot";
 
+  final Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies = {
+    "Adiantum caudatum":{
+      "temperatuurMin":15,
+      "temperatuurMax":25,
+      "luchtvochtigheidMin":10,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":50,
+      "grondwaterniveauMax":100,
+      "lichtintensiteitMin":10,
+      "lichtintensiteitMax":50,
+    },
+    "Dypsis lutescens":{
+      "temperatuurMin":15,
+      "temperatuurMax":25,
+      "luchtvochtigheidMin":10,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":50,
+      "grondwaterniveauMax":100,
+      "lichtintensiteitMin":10,
+      "lichtintensiteitMax":50,
+    },
+    "Ficus elastica":{
+      "temperatuurMin":15,
+      "temperatuurMax":25,
+      "luchtvochtigheidMin":10,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":50,
+      "grondwaterniveauMax":100,
+      "lichtintensiteitMin":10,
+      "lichtintensiteitMax":50,
+    },
+    "Narcissus papyraceus":{
+      "temperatuurMin":15,
+      "temperatuurMax":25,
+      "luchtvochtigheidMin":30,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":50,
+      "grondwaterniveauMax":100,
+      "lichtintensiteitMin":10,
+      "lichtintensiteitMax":50,
+    },
+    "Rhododendron simsii":{
+      "temperatuurMin":15,
+      "temperatuurMax":25,
+      "luchtvochtigheidMin":10,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":50,
+      "grondwaterniveauMax":100,
+      "lichtintensiteitMin":10,
+      "lichtintensiteitMax":50,
+      },
+    };
+
   @override
   void initState() {
     super.initState();
 
     changeActivePlantStats(testPlantName);
+
+    generateWarnings();
+  }
+
+  void generateWarnings(){
+    makeWarnings(database,table,PlantStorage(),idealEnvironmentPerSpecies).then((List<String> newWarnings){
+      setState(() {
+        warnings = newWarnings;
+      });
+    });
+    
+    
   }
 
   void changeActivePlantStats(String plantName){
@@ -288,14 +355,15 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   // 
-  void switchToPlantPage(String room, String plantName, String scientificName, String locationImage) {
+  void switchToPlantPage(String room, String plantName, String scientificName, String locationImage, String plantCode) {
     setState(() {
       activePlantInformation[0] = room;
       activePlantInformation[1] = plantName;
       activePlantInformation[2] = scientificName;
       activePlantInformation[3] = locationImage;
-      goToPage(2);
+      activePlantInformation[4] = plantCode;
     });
+    goToPage(2);
   }
 
   void goToPage(int index){
@@ -310,10 +378,10 @@ class _LandingPageState extends State<LandingPage> {
         controller: page_controller,
         onPageChanged: (index){pageChanged(index);},
         children: [
-          HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage,),
-          ProblemPage(switchToPlantPage: switchToPlantPage,),
-          PlantPage(activePlantInformation: activePlantInformation, activePlantStats: activePlantStats,),
-          AddPage(storage: PlantStorage(), goToPage: goToPage,),
+          HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage, warnings: warnings,),
+          ProblemPage(switchToPlantPage: switchToPlantPage, warnings: warnings,),
+          PlantPage(activePlantInformation: activePlantInformation, activePlantStats: activePlantStats, idealEnvironmentPerSpecies: idealEnvironmentPerSpecies),
+          AddPage(storage: PlantStorage(), goToPage: goToPage, idealEnvironmentPerSpecies: idealEnvironmentPerSpecies),
         ]
       ),
       //Below every page is the navigationbar to allow navigation and tell the user where they are
@@ -443,4 +511,58 @@ Future<Map<String, dynamic>> getLatestPlantInfo(String database, String table, S
     print('An error occurred!');
     return {};
   }
+}
+
+Future<List<String>> makeWarnings(String database, String table, PlantStorage storage, Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies) async {
+  List<String> warnings = [];
+  String fullStorageString = await storage.readPlants();
+  List<String> allRooms = fullStorageString.split("/");
+  allRooms.forEach((roomListString) {
+    if(roomListString != ""){
+      List<String> roomList = roomListString.split(";");
+      String room = roomList[0];
+      String roomWarning = room;
+      roomList.remove(room);
+      roomList.forEach((plantString) {
+        List<String> plantList = plantString.split(",");
+        // getLatestPlantInfo(database,table,plantList[2]).then((Map<String, dynamic> plantData){
+        getLatestPlantInfo(database,table,"plantenpot").then((Map<String, dynamic> plantData){
+          print(plantData);
+          String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
+          print(warning);
+          if(warning != "") roomWarning = roomWarning + ";"+ plantList[1] + "," + warning;
+          print(roomWarning);
+        });
+      });
+      print("iets");
+      print(roomWarning);
+      if(roomWarning != room) warnings.add(roomWarning);
+      print(warnings);
+    }
+  });
+  print(warnings);
+  print("werkt");
+  return warnings;
+}
+
+String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData){
+  String warning = "";
+  if(plantData["waterniveau"] == 0){
+    warning = "Waterreservoir moet bijgevuld worden!";
+  }
+  else if(plantData["temperatuur"]<idealEnvironment["temperatuurMin"]){
+    warning = "Kamer temperatuur te laag voor deze plant!";
+  }
+  else if(plantData["temperatuur"]>idealEnvironment["temperatuurMax"]){
+    warning = "Kamer temperatuur te hoog voor deze plant!";
+  }
+  //light warnings need to be here
+  else if(plantData["luchtvochtigheid"]<idealEnvironment["luchtvochtigheidMin"]){
+    warning = "De luchtvochtigheid is te laag voor deze plant!";
+  }
+  else if(plantData["luchtvochtigheid"]>idealEnvironment["luchtvochtigheidMax"]){
+    warning = "De luchtvochtigheid is te hoog voor deze plant";
+  }
+
+  return warning;
 }

@@ -5,16 +5,15 @@ import 'package:path/path.dart' as path;
 import 'dart:io' as io;
 import '../main.dart' show PlantStorage;
 import 'package:growth_guardian/widget/clasifier.dart';
-import 'dart:typed_data';
-import 'dart:convert';
 import 'package:image/image.dart' as img;
 import 'dart:math';
 
 class AddPage extends StatefulWidget {
-  const AddPage({super.key, required this.storage, required this.goToPage});
+  const AddPage({super.key, required this.storage, required this.goToPage, required this.idealEnvironmentPerSpecies});
 
   final PlantStorage storage;
   final Function goToPage;
+  final Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies;
 
   @override
   State<AddPage> createState() => _AddPageState();
@@ -22,15 +21,19 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   String imagePath = "";
-  late img.Image takenPicture;
 
   bool pictureActive = false;
+  bool loadingPrediction = false;
 
   String plantWetenschappelijk = 'Wetenschappelijke naam';
 
   CameraController? _cameraController;
 
   bool cameraInitialised = false;
+
+  String idealTemp = "...";
+  String idealHumid = "...";
+  String idealLight = "...";
 
   @override
   void initState() {
@@ -68,20 +71,47 @@ class _AddPageState extends State<AddPage> {
       print("taken picture");
       setState(() {
         imagePath = picturePath;
-        takenPicture = convertedImage;
+        loadingPrediction = true;
         pictureActive = true;
       });
-      String prediction =  await classifyImage(takenPicture);
+      String prediction =  await classifyImage(convertedImage);
       setState(() {
         plantWetenschappelijk = prediction;
+        loadingPrediction = false;
       });
-      
+      setIdealValues();
     } 
     catch (e) {
       print(e);
     }
   }
 
+  void resetPicture(){
+    File(imagePath).delete();
+    setState(() {
+      pictureActive = false;
+      imagePath = "";
+      plantWetenschappelijk = 'Wetenschappelijke naam';
+    });
+    removeIdealValues();
+  }
+
+  void setIdealValues(){
+    setState(() {
+      final speciesInfo = widget.idealEnvironmentPerSpecies[plantWetenschappelijk]!;
+      idealTemp = speciesInfo["temperatuurMin"].toString() + " - " + speciesInfo["temperatuurMax"].toString() + " C";
+      idealHumid = speciesInfo["luchtvochtigheidMin"].toString() + " - " + speciesInfo["luchtvochtigheidMax"].toString() + " %";
+      idealLight = speciesInfo["lichtintensiteitMin"].toString() + " - " + speciesInfo["lichtintensiteitMax"].toString() + " Lux";
+    });
+  }
+
+  void removeIdealValues(){
+    setState(() {
+      idealTemp = "...";
+      idealHumid = "...";
+      idealLight = "...";
+    });
+  }
 
 
   @override
@@ -94,7 +124,7 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     TextEditingController _plantNaam = TextEditingController();
-    TextEditingController _plantSoort = TextEditingController();
+    TextEditingController _plantCode = TextEditingController();
     TextEditingController _plantLocatie = TextEditingController();
 
     return Scaffold(
@@ -140,24 +170,38 @@ class _AddPageState extends State<AddPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Text(
-                    '$plantWetenschappelijk',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+              child: Center(
+                child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Text(
+                        '$plantWetenschappelijk',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      IconButton(onPressed: (){
+                        if(!pictureActive) takePicture();
+                        else{
+                          if(!loadingPrediction) resetPicture();
+                        }
+                      }, icon: loadingPrediction
+                      ?  CircularProgressIndicator()
+                      : pictureActive
+                      ? Icon(Icons.undo)
+                      : Icon(Icons.add_a_photo)
+                      )
+                    ],
                   ),
-                  IconButton(onPressed: (){
-                    takePicture();
-                  }, icon: Icon(Icons.add_a_photo))
-                ],
+                ),
               ),
             ),
             addTextField(fieldController: _plantNaam, labelText: 'Geef de plant een herkenbare naam',),
-            // addTextField(fieldController: _plantSoort, labelText: 'Wat voor soort plant is het?',),
             addTextField(fieldController: _plantLocatie, labelText: 'Waar staat de plant in het huis?',),
+            addTextField(fieldController: _plantCode, labelText: 'Wat is de code van de plantenpot?',),
             Padding(
               padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -171,7 +215,7 @@ class _AddPageState extends State<AddPage> {
                       child: Row(
                         children: [
                           Text('Temperatuur: '),
-                          Text('...'),
+                          Text(idealTemp),
                         ],
                       ),
                     ),
@@ -180,7 +224,7 @@ class _AddPageState extends State<AddPage> {
                       child: Row(
                         children: [
                           Text('Luchtvochtigheid: '),
-                          Text('...'),
+                          Text(idealHumid),
                         ],
                       ),
                     ),
@@ -189,7 +233,7 @@ class _AddPageState extends State<AddPage> {
                       child: Row(
                         children: [
                           Text('Lichtniveau: '),
-                        Text('...'),
+                        Text(idealLight),
                       ],
                     ),
                   ),
@@ -271,7 +315,7 @@ class _AddPageState extends State<AddPage> {
 
 
 
-                        widget.storage.addPlant(_plantLocatie.text, _plantNaam.text, _plantSoort.text);
+                        widget.storage.addPlant(_plantLocatie.text, _plantNaam.text, plantWetenschappelijk, _plantCode.text);
                         
                         showDialog(
                           context: context,

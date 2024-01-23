@@ -3,11 +3,13 @@ import 'package:growth_guardian/widget/cart.dart';
 import '../main.dart' show PlantStorage;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.storage, required this.switchToPlantPage});
+  const HomePage({super.key, required this.storage, required this.switchToPlantPage, required this.warnings});
 
   final Function switchToPlantPage;
 
   final PlantStorage storage;
+
+  final List<String> warnings;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 List<String> rooms = [];
-List<String> warnings = ["Woonkamer;Hoekplant,Luchtvochtigheid te hoog;Vette plant,Krijgt te veel zonlicht","Badkamer;Vette plant,Krijgt te veel zonlicht"];
+// List<String> warnings = ["Woonkamer;Hoekplant,Luchtvochtigheid te hoog;Vette plant,Krijgt te veel zonlicht","Badkamer;Vette plant,Krijgt te veel zonlicht"];
 
 @override
 void initState() {
@@ -61,7 +63,7 @@ Future refresh() async {
             itemCount: rooms.length,
             itemBuilder: (context, index) {
               if (index < rooms.length) {
-                return RoomList(room: rooms[index],allWarnings: warnings, switchToPlantPage: widget.switchToPlantPage,);
+                return RoomList(room: rooms[index],allWarnings: widget.warnings, switchToPlantPage: widget.switchToPlantPage,);
               }
             }
           )
