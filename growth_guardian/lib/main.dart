@@ -322,11 +322,11 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   void generateWarnings(){
-    makeWarnings(database,table,PlantStorage(),idealEnvironmentPerSpecies).then((List<String> newWarnings){
-      setState(() {
-        warnings = newWarnings;
-      });
-    });
+    // makeWarnings(database,table,PlantStorage(),idealEnvironmentPerSpecies).then((List<String> newWarnings){
+    //   setState(() {
+    //     warnings = newWarnings;
+    //   });
+    // });
     
     
   }
@@ -533,56 +533,57 @@ void get_data_from_postgresql_server() async {
     print(r);
   }
 
-Future<List<String>> makeWarnings(String database, String table, PlantStorage storage, Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies) async {
-  List<String> warnings = [];
-  String fullStorageString = await storage.readPlants();
-  List<String> allRooms = fullStorageString.split("/");
-  allRooms.forEach((roomListString) {
-    if(roomListString != ""){
-      List<String> roomList = roomListString.split(";");
-      String room = roomList[0];
-      String roomWarning = room;
-      roomList.remove(room);
-      roomList.forEach((plantString) {
-        List<String> plantList = plantString.split(",");
-        // getLatestPlantInfo(database,table,plantList[2]).then((Map<String, dynamic> plantData){
-        getLatestPlantInfo(database,table,"plantenpot").then((Map<String, dynamic> plantData){
-          print(plantData);
-          String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
-          print(warning);
-          if(warning != "") roomWarning = roomWarning + ";"+ plantList[1] + "," + warning;
-          print(roomWarning);
-        });
-      });
-      print("iets");
-      print(roomWarning);
-      if(roomWarning != room) warnings.add(roomWarning);
-      print(warnings);
-    }
-  });
-  print(warnings);
-  print("werkt");
-  return warnings;
-}
+// Future<List<String>> makeWarnings(String database, String table, PlantStorage storage, Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies) async {
+//   List<String> warnings = [];
+//   String fullStorageString = await storage.readPlants();
+//   List<String> allRooms = fullStorageString.split("/");
+//   allRooms.forEach((roomListString) {
+//     if(roomListString != ""){
+//       List<String> roomList = roomListString.split(";");
+//       String room = roomList[0];
+//       String roomWarning = room;
+//       roomList.remove(room);
+//       roomList.forEach((plantString) {
+//         List<String> plantList = plantString.split(",");
+//         // getLatestPlantInfo(database,table,plantList[2]).then((Map<String, dynamic> plantData){
+//         getLatestPlantInfo(database,table,"plantenpot").then((Map<String, dynamic> plantData){
+//           print(plantData);
+//           String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
+//           print(warning);
+//           if(warning != "") roomWarning = roomWarning + ";"+ plantList[1] + "," + warning;
+//           print(roomWarning);
+//         });
+//       });
+//       print("iets");
+//       print(roomWarning);
+//       if(roomWarning != room) warnings.add(roomWarning);
+//       print(warnings);
+//     }
+//   });
+//   print(warnings);
+//   print("werkt");
+//   return warnings;
+// }
 
-String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData){
-  String warning = "";
-  if(plantData["waterniveau"] == 0){
-    warning = "Waterreservoir moet bijgevuld worden!";
-  }
-  else if(plantData["temperatuur"]<idealEnvironment["temperatuurMin"]){
-    warning = "Kamer temperatuur te laag voor deze plant!";
-  }
-  else if(plantData["temperatuur"]>idealEnvironment["temperatuurMax"]){
-    warning = "Kamer temperatuur te hoog voor deze plant!";
-  }
-  //light warnings need to be here
-  else if(plantData["luchtvochtigheid"]<idealEnvironment["luchtvochtigheidMin"]){
-    warning = "De luchtvochtigheid is te laag voor deze plant!";
-  }
-  else if(plantData["luchtvochtigheid"]>idealEnvironment["luchtvochtigheidMax"]){
-    warning = "De luchtvochtigheid is te hoog voor deze plant";
-  }
+// String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData){
+//   String warning = "";
+//   if(plantData["waterniveau"] == 0){
+//     warning = "Waterreservoir moet bijgevuld worden!";
+//   }
+//   else if(plantData["temperatuur"]<idealEnvironment["temperatuurMin"]){
+//     warning = "Kamer temperatuur te laag voor deze plant!";
+//   }
+//   else if(plantData["temperatuur"]>idealEnvironment["temperatuurMax"]){
+//     warning = "Kamer temperatuur te hoog voor deze plant!";
+//   }
+//   //light warnings need to be here
+//   else if(plantData["luchtvochtigheid"]<idealEnvironment["luchtvochtigheidMin"]){
+//     warning = "De luchtvochtigheid is te laag voor deze plant!";
+//   }
+//   else if(plantData["luchtvochtigheid"]>idealEnvironment["luchtvochtigheidMax"]){
+//     warning = "De luchtvochtigheid is te hoog voor deze plant";
+//   }
 
-  return warning;
+//   return warning;
+// }
 }
