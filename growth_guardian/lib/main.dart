@@ -191,76 +191,70 @@ class _LandingPageState extends State<LandingPage> {
 
   final Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies = {
     "Adiantum caudatum":{
-      "temperatuurMin":15,
-      "temperatuurMax":25,
-      "luchtvochtigheidMin":10,
-      "luchtvochtigheidMax":50,
-      "grondwaterniveauMin":50,
-      "grondwaterniveauMax":100,
-      "lichtintensiteitMin":10,
-      "lichtintensiteitMax":50,
-      "weekelijkseLichtUrenMin":50,
-      "weekelijkseLichtUrenMax":100, 
+      "temperatuurMin":18,
+      "temperatuurMax":24,
+      "luchtvochtigheidMin":40,
+      "luchtvochtigheidMax":60,
+      "grondwaterniveauMin":60,
+      "grondwaterniveauMax":80,
+      "lichtintensiteitMin":800,
+      "dagelijkseLichtMinutenMin":720,
+      "dagelijkseLichtMinutenMax":960, 
     },
     "Dypsis lutescens":{
-      "temperatuurMin":15,
-      "temperatuurMax":25,
-      "luchtvochtigheidMin":10,
-      "luchtvochtigheidMax":50,
-      "grondwaterniveauMin":50,
-      "grondwaterniveauMax":100,
-      "lichtintensiteitMin":10,
-      "lichtintensiteitMax":50,
-      "weekelijkseLichtUrenMin":50,
-      "weekelijkseLichtUrenMax":100, 
+      "temperatuurMin":21,
+      "temperatuurMax":27,
+      "luchtvochtigheidMin":30,
+      "luchtvochtigheidMax":60,
+      "grondwaterniveauMin":70,
+      "grondwaterniveauMax":90,
+      "lichtintensiteitMin":800,
+      "dagelijkseLichtMinutenMin":720,
+      "dagelijkseLichtMinutenMax":960,  
     },
     "Ficus elastica":{
-      "temperatuurMin":15,
-      "temperatuurMax":25,
-      "luchtvochtigheidMin":10,
-      "luchtvochtigheidMax":50,
-      "grondwaterniveauMin":50,
-      "grondwaterniveauMax":100,
-      "lichtintensiteitMin":10,
-      "lichtintensiteitMax":50,
-      "weekelijkseLichtUrenMin":50,
-      "weekelijkseLichtUrenMax":100, 
-    },
-    "Narcissus papyraceus":{
-      "temperatuurMin":15,
-      "temperatuurMax":25,
+      "temperatuurMin":18,
+      "temperatuurMax":24,
       "luchtvochtigheidMin":30,
       "luchtvochtigheidMax":50,
-      "grondwaterniveauMin":50,
-      "grondwaterniveauMax":100,
-      "lichtintensiteitMin":10,
-      "lichtintensiteitMax":50,
-      "weekelijkseLichtUrenMin":50,
-      "weekelijkseLichtUrenMax":100, 
+      "grondwaterniveauMin":60,
+      "grondwaterniveauMax":80,
+      "lichtintensiteitMin":800,
+      "dagelijkseLichtMinutenMin":720,
+      "dagelijkseLichtMinutenMax":960,  
+    },
+    "Narcissus papyraceus":{
+      "temperatuurMin":10,
+      "temperatuurMax":18,
+      "luchtvochtigheidMin":30,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":60,
+      "grondwaterniveauMax":80,
+      "lichtintensiteitMin":800,
+      "dagelijkseLichtMinutenMin":720,
+      "dagelijkseLichtMinutenMax":960,  
     },
     "Rhododendron simsii":{
-      "temperatuurMin":15,
-      "temperatuurMax":25,
-      "luchtvochtigheidMin":10,
-      "luchtvochtigheidMax":50,
-      "grondwaterniveauMin":50,
-      "grondwaterniveauMax":100,
-      "lichtintensiteitMin":10,
-      "lichtintensiteitMax":50,
-      "weekelijkseLichtUrenMin":50,
-      "weekelijkseLichtUrenMax":100, 
+      "temperatuurMin":16,
+      "temperatuurMax":21,
+      "luchtvochtigheidMin":40,
+      "luchtvochtigheidMax":100,
+      "grondwaterniveauMin":60,
+      "grondwaterniveauMax":80,
+      "lichtintensiteitMin":800,
+      "dagelijkseLichtMinutenMin":720,
+      "dagelijkseLichtMinutenMax":960,  
       },
      "Wetenschappelijke naam":{
-      "temperatuurMin":15,
-      "temperatuurMax":25,
-      "luchtvochtigheidMin":10,
-      "luchtvochtigheidMax":50,
-      "grondwaterniveauMin":50,
-      "grondwaterniveauMax":100,
-      "lichtintensiteitMin":10,
-      "lichtintensiteitMax":50,
-      "weekelijkseLichtUrenMin":50,
-      "weekelijkseLichtUrenMax":100, 
+      "temperatuurMin":0,
+      "temperatuurMax":0,
+      "luchtvochtigheidMin":0,
+      "luchtvochtigheidMax":0,
+      "grondwaterniveauMin":0,
+      "grondwaterniveauMax":0,
+      "lichtintensiteitMin":0,
+      "dagelijkseLichtMinutenMin":0,
+      "dagelijkseLichtMinutenMax":0, 
       }, 
     };
 
@@ -584,60 +578,6 @@ void get_data_from_postgresql_server() async {
       
       await insertDog(sensordata);
   }
-
-// Future<List<String>> makeWarnings(String database, String table, PlantStorage storage, Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies) async {
-//   List<String> warnings = [];
-//   String fullStorageString = await storage.readPlants();
-//   List<String> allRooms = fullStorageString.split("/");
-//   allRooms.forEach((roomListString) {
-//     if(roomListString != ""){
-//       List<String> roomList = roomListString.split(";");
-//       String room = roomList[0];
-//       String roomWarning = room;
-//       roomList.remove(room);
-//       roomList.forEach((plantString) {
-//         List<String> plantList = plantString.split(",");
-//         // getLatestPlantInfo(database,table,plantList[2]).then((Map<String, dynamic> plantData){
-//         getLatestPlantInfo(database,table,"plantenpot").then((Map<String, dynamic> plantData){
-//           print(plantData);
-//           String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
-//           print(warning);
-//           if(warning != "") roomWarning = roomWarning + ";"+ plantList[1] + "," + warning;
-//           print(roomWarning);
-//         });
-//       });
-//       print("iets");
-//       print(roomWarning);
-//       if(roomWarning != room) warnings.add(roomWarning);
-//       print(warnings);
-//     }
-//   });
-//   print(warnings);
-//   print("werkt");
-//   return warnings;
-// }
-
-// String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData){
-//   String warning = "";
-//   if(plantData["waterniveau"] == 0){
-//     warning = "Waterreservoir moet bijgevuld worden!";
-//   }
-//   else if(plantData["temperatuur"]<idealEnvironment["temperatuurMin"]){
-//     warning = "Kamer temperatuur te laag voor deze plant!";
-//   }
-//   else if(plantData["temperatuur"]>idealEnvironment["temperatuurMax"]){
-//     warning = "Kamer temperatuur te hoog voor deze plant!";
-//   }
-//   //light warnings need to be here
-//   else if(plantData["luchtvochtigheid"]<idealEnvironment["luchtvochtigheidMin"]){
-//     warning = "De luchtvochtigheid is te laag voor deze plant!";
-//   }
-//   else if(plantData["luchtvochtigheid"]>idealEnvironment["luchtvochtigheidMax"]){
-//     warning = "De luchtvochtigheid is te hoog voor deze plant";
-//   }
-
-//   return warning;
-// }
 }
 
 Future<List<String>> makeWarnings(String database, String table, PlantStorage storage, Map<String,Map<String,dynamic>> idealEnvironmentPerSpecies) async {
@@ -659,7 +599,8 @@ Future<List<String>> makeWarnings(String database, String table, PlantStorage st
         Map<String, dynamic>? plantResult = idealEnvironmentPerSpecies[plantList[1]]!;
         print("jemoeder" + plantData.isEmpty.toString());
         if(plantData.isNotEmpty) {
-          String warning = makeWarning(plantResult, plantData);
+          List<int> lightMinutes = await getLastDayOfLightMinutes(database,table,plantList[2]);
+          String warning = makeWarning(plantResult, plantData, lightMinutes);
           if(warning != "") roomWarning = roomWarning + ";"+ plantList[0] + "," + plantList[1] + "," + plantList[2] + "," + warning;
         }
         print("plantList: " + plantList.toString());
@@ -671,9 +612,9 @@ Future<List<String>> makeWarnings(String database, String table, PlantStorage st
   return warnings;
 }
 
-String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData){
+String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData, List<int> lightMinutes){
   String warning = "";
-  if(plantData["waterniveau"] == 3){
+  if(plantData["waterniveau"] == 0){
     warning = "Waterreservoir moet bijgevuld worden!";
   }
   else if(plantData["temperatuur"]<idealEnvironment["temperatuurMin"]){
@@ -682,13 +623,48 @@ String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> pla
   else if(plantData["temperatuur"]>idealEnvironment["temperatuurMax"]){
     warning = "Kamer temperatuur te hoog voor deze plant!";
   }
-  //light warnings need to be here
   else if(plantData["luchtvochtigheid"]<idealEnvironment["luchtvochtigheidMin"]){
     warning = "De luchtvochtigheid is te laag voor deze plant!";
   }
   else if(plantData["luchtvochtigheid"]>idealEnvironment["luchtvochtigheidMax"]){
     warning = "De luchtvochtigheid is te hoog voor deze plant";
   }
-
+  else if(plantData["lichtniveau"]>idealEnvironment["lichtintensiteitMin"] && DateTime.now().hour > 9 && DateTime.now().hour<16){
+    warning = "Het is te donker voor de plant";
+  }
+  else if(lightMinutes[0]>idealEnvironment["dagelijkseLichtMinutenMax"] && lightMinutes[1] == 1440){
+    warning = "De plant krijgt te veel licht uren";
+  }
+  else if(lightMinutes[0]<idealEnvironment["dagelijkseLichtMinutenMin"] && lightMinutes[1] == 1440){
+    warning = "De plant krijgt te weinig licht uren";
+  }
   return warning;
+}
+
+Future<List<int>> getLastDayOfLightMinutes(String database, String table, String plantName) async{
+  final db = await openDatabase(database);
+
+  plantName = "\"" + plantName + "\"";
+  DateTime now = DateTime.now();
+  int startOfRecords = DateTime(now.year, now.month, now.day-1, now.hour, now.minute).millisecondsSinceEpoch;
+  //grabs the latest record in the given table for the given plant
+  String query = "SELECT * FROM "+ table + " WHERE tijd > " + startOfRecords.toString()+ " AND naam = " + plantName + " ORDER BY tijd DESC LIMIT 1";
+  print(query);
+  try {
+    List<Map<String,dynamic>> list = await db.rawQuery(query);
+    int lightMinutes = 0;
+    int amountOfRecords = 0;
+    for(var i in list){
+      if(i['lichtniveau'] > 800){
+        lightMinutes++;
+      }
+      amountOfRecords++;
+    }
+    //print('Done ' + plantName);
+    return [lightMinutes,amountOfRecords];
+  } catch (Exception) {
+    print('An error occurred!');
+    print(Exception);
+    return [0];
+  }
 }

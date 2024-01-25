@@ -19,8 +19,9 @@ class card extends StatelessWidget {
     if(plantNamesList.length<4){
       plantNamesList.add("");
     }
+    String lowerRoomName = roomName.toLowerCase();
 
-    String dirFoto = path.join('/data/user/0/com.example.growth_guardian/cache/$roomName/_${plantNamesList[0].toLowerCase()}.jpg');
+    String dirFoto = path.join('/data/user/0/com.example.growth_guardian/cache/$lowerRoomName/_${plantNamesList[0].toLowerCase()}.jpg');
     return GestureDetector(
       onTap: () {
         switchToPlantPage(roomName, plantNamesList[0], plantNamesList[1], dirFoto, plantNamesList[2]);

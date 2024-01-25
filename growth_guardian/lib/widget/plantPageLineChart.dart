@@ -12,7 +12,7 @@ class PlantPageLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    print(dataList);
     //Selects the displayed interval on the x axis of the graph
     late DateTimeIntervalType graphInterval;
     //Selects which graph title is displayed at the top of  the graph
