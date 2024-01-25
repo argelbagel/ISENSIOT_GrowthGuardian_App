@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:growth_guardian/widget/cart.dart';
 
 class ProblemPage extends StatefulWidget {
-  const ProblemPage({super.key, required this.switchToPlantPage, required this.warnings});
+  const ProblemPage({super.key, required this.switchToPlantPage, required this.warnings, required this.loadDatabase});
 
   final Function switchToPlantPage;
+  final Function loadDatabase;
 
   final List<String> warnings;
 
@@ -20,8 +21,7 @@ class _ProblemPageState extends State<ProblemPage> {
 
   //Since warnings cant be dynamically generated yet this cant be esteblished yet
   Future refresh() async {
-    //rooms.clear();
-    //getLocalStorage();
+    widget.loadDatabase();
   }
 
   @override

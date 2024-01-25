@@ -68,7 +68,7 @@ class _PlantPageState extends State<PlantPage> {
     setState(() {
       idealTemp = speciesInfo["temperatuurMin"].toString() + " - " + speciesInfo["temperatuurMax"].toString() + " C";
       idealHumid = speciesInfo["luchtvochtigheidMin"].toString() + " - " + speciesInfo["luchtvochtigheidMax"].toString() + " %";
-      idealLight = speciesInfo["lichtintensiteitMin"].toString() + " - " + speciesInfo["lichtintensiteitMax"].toString() + " Lux";
+      idealLight = speciesInfo["lichtintensiteitMin"].toString() + " Lux";
     });
   }
 
@@ -230,27 +230,27 @@ class _PlantPageState extends State<PlantPage> {
                   Row(
                     children: [
                       elementTextButton(currentElement: element, buttonElement: "Temperatuur", changeElement: changeElement),
-                      Text(widget.activePlantStats["temperatuur"].toString()),
+                      Text(widget.activePlantStats["temperatuur"].toString()+" C"),
                       Spacer(),
                       elementTextButton(currentElement: element, buttonElement: "Luchtvochtigheid", changeElement: changeElement),
-                      Text(widget.activePlantStats["luchtvochtigheid"].toString()),
+                      Text(widget.activePlantStats["luchtvochtigheid"].toString()+" %"),
                     ],
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
                       elementTextButton(currentElement: element, buttonElement: "Grondwater niveau", changeElement: changeElement),
-                      Text(widget.activePlantStats["bodemvocht"].toString()),
+                      Text(widget.activePlantStats["bodemvocht"].toString()+" %"),
                       Spacer(),
                       elementTextButton(currentElement: element, buttonElement: "Reservoir", changeElement: changeElement),
-                      Text(widget.activePlantStats["waterniveau"].toString()),
+                      Text(widget.activePlantStats["waterniveau"].toString()+" %"),
                     ],
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
                       elementTextButton(currentElement: element, buttonElement: "Licht", changeElement: changeElement),
-                      Text(widget.activePlantStats["lichtniveau"].toString()),
+                      Text(widget.activePlantStats["lichtniveau"].toString()+" LUX"),
                     ],
                   ),
                 ],

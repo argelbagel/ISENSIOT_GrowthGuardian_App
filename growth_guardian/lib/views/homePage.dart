@@ -3,9 +3,11 @@ import 'package:growth_guardian/widget/cart.dart';
 import '../main.dart' show PlantStorage;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.storage, required this.switchToPlantPage, required this.warnings});
+  const HomePage({super.key, required this.storage, required this.switchToPlantPage, required this.warnings, required this.loadDatabase});
 
   final Function switchToPlantPage;
+
+  final Function loadDatabase;
 
   final PlantStorage storage;
 
@@ -42,6 +44,7 @@ void getLocalStorage(){
 
 Future refresh() async {
     rooms.clear();
+    await widget.loadDatabase();
     getLocalStorage();
   }
 

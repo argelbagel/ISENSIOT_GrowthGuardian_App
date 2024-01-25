@@ -262,7 +262,11 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
 
-    get_data_from_postgresql_server();
+    loadDatabase();
+  }
+
+  Future<void> loadDatabase() async{
+    await get_data_from_postgresql_server();
     changeActivePlantStats(testPlantName);
 
     generateWarnings();
@@ -355,8 +359,8 @@ class _LandingPageState extends State<LandingPage> {
         controller: page_controller,
         onPageChanged: (index){pageChanged(index);},
         children: [
-          HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage, warnings: warnings,),
-          ProblemPage(switchToPlantPage: switchToPlantPage, warnings: warnings,),
+          HomePage(storage: PlantStorage(), switchToPlantPage: switchToPlantPage, warnings: warnings, loadDatabase: loadDatabase,),
+          ProblemPage(switchToPlantPage: switchToPlantPage, warnings: warnings, loadDatabase: loadDatabase,),
           PlantPage(activePlantInformation: activePlantInformation, activePlantStats: activePlantStats, idealEnvironmentPerSpecies: idealEnvironmentPerSpecies),
           AddPage(storage: PlantStorage(), goToPage: goToPage, idealEnvironmentPerSpecies: idealEnvironmentPerSpecies),
         ]
@@ -491,7 +495,7 @@ Future<Map<String, dynamic>> getLatestPlantInfo(String database, String table, S
   }
 }
 
-void get_data_from_postgresql_server() async {
+Future<void> get_data_from_postgresql_server() async {
   //Code for the database
   //print(await getDatabasesPath()); 
   // Avoid errors caused by flutter upgrade.

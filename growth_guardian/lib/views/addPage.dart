@@ -101,7 +101,7 @@ class _AddPageState extends State<AddPage> {
       final speciesInfo = widget.idealEnvironmentPerSpecies[plantWetenschappelijk]!;
       idealTemp = speciesInfo["temperatuurMin"].toString() + " - " + speciesInfo["temperatuurMax"].toString() + " C";
       idealHumid = speciesInfo["luchtvochtigheidMin"].toString() + " - " + speciesInfo["luchtvochtigheidMax"].toString() + " %";
-      idealLight = speciesInfo["lichtintensiteitMin"].toString() + " - " + speciesInfo["lichtintensiteitMax"].toString() + " Lux";
+      idealLight = speciesInfo["lichtintensiteitMin"].toString() + " Lux";
     });
   }
 
