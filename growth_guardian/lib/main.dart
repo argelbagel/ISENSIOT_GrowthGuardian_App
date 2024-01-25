@@ -250,6 +250,18 @@ class _LandingPageState extends State<LandingPage> {
       "weekelijkseLichtUrenMin":50,
       "weekelijkseLichtUrenMax":100, 
       },
+     "Wetenschappelijke naam":{
+      "temperatuurMin":15,
+      "temperatuurMax":25,
+      "luchtvochtigheidMin":10,
+      "luchtvochtigheidMax":50,
+      "grondwaterniveauMin":50,
+      "grondwaterniveauMax":100,
+      "lichtintensiteitMin":10,
+      "lichtintensiteitMax":50,
+      "weekelijkseLichtUrenMin":50,
+      "weekelijkseLichtUrenMax":100, 
+      }, 
     };
 
   @override
@@ -273,8 +285,12 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   void changeActivePlantStats(String plantName){
+    print("ACTIVE PLANTTTTTTTTTTTTTTTTTT");
+    print(plantName);
     //Grabs the latest entry of a plant and updates the state variable to be send to the plant page
     getLatestPlantInfo(database,table,plantName).then((newPlantInfo){
+      print("AMOGUSUSUSUSUUSUSUSUSUSUUSUSUS");
+      print(newPlantInfo);
       setState(() {
         activePlantStats = newPlantInfo;
       });
@@ -315,6 +331,7 @@ class _LandingPageState extends State<LandingPage> {
           }
         }
       }
+
     }
     print(warningText);
     print(activePlantInformation.length);
@@ -326,6 +343,9 @@ class _LandingPageState extends State<LandingPage> {
       activePlantInformation[4] = plantCode;
       activePlantInformation[5] = warningText;
     });
+    print("PLANTCODDEEEEEEEEEEEEEEE");
+    print(plantCode);
+    changeActivePlantStats(plantCode);
     goToPage(2);
   }
 
@@ -465,7 +485,7 @@ Future<Map<String, dynamic>> getLatestPlantInfo(String database, String table, S
   plantName = "\"" + plantName + "\"";
   //grabs the latest record in the given table for the given plant
   String query = "SELECT * FROM "+ table + " WHERE naam = " + plantName + " ORDER BY tijd DESC LIMIT 1";
-
+  print(query);
   try {
     List<Map<String,dynamic>> list = await db.rawQuery(query);
     //print('Done ' + plantName);
@@ -632,10 +652,16 @@ Future<List<String>> makeWarnings(String database, String table, PlantStorage st
       roomList.remove(room);
       for(var plantString in roomList){
         List<String> plantList = plantString.split(",");
-        Map<String, dynamic> plantData = await getLatestPlantInfo(database,table,"plantenpot");
+        print('AMOGUS ' + plantList.toString());
+        Map<String, dynamic> plantData = await getLatestPlantInfo(database,table,plantList[2]);
 
-        String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
-        if(warning != "") roomWarning = roomWarning + ";"+ plantList[0] + "," + plantList[1] + "," + plantList[2] + "," + warning;
+        print('jemoeder' + plantList[1].toString());
+        Map<String, dynamic>? plantResult = idealEnvironmentPerSpecies[plantList[1]]!;
+        print("jemoeder" + plantData.isEmpty.toString());
+        if(plantData.isNotEmpty) {
+          String warning = makeWarning(plantResult, plantData);
+          if(warning != "") roomWarning = roomWarning + ";"+ plantList[0] + "," + plantList[1] + "," + plantList[2] + "," + warning;
+        }
         print("plantList: " + plantList.toString());
         print("roomwarning: " + roomWarning);
       }
@@ -647,7 +673,7 @@ Future<List<String>> makeWarnings(String database, String table, PlantStorage st
 
 String makeWarning(Map<String,dynamic> idealEnvironment,Map<String, dynamic> plantData){
   String warning = "";
-  if(plantData["waterniveau"] == 0){
+  if(plantData["waterniveau"] == 3){
     warning = "Waterreservoir moet bijgevuld worden!";
   }
   else if(plantData["temperatuur"]<idealEnvironment["temperatuurMin"]){

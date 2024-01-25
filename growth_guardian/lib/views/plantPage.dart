@@ -18,7 +18,7 @@ class PlantPage extends StatefulWidget {
 
 class _PlantPageState extends State<PlantPage> {
   //Creates the state variables and gives them defaults
-  String mode = "Maand";
+  String mode = "Dag";
   String element = "Temperatuur";
   //State datalist that gets initialised in the initialiser and can get updated by the changeActiveData function
   List<Measurement> activeData = [];
