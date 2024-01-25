@@ -41,7 +41,7 @@ class _PlantPageState extends State<PlantPage> {
 
   void changeActiveData(String element, String mode){
     //Change plantName to the correct part of activePlantInformation when proper data starts being used
-    QueryDatabase(database, table, element, mode, plantName).then((value){
+    QueryDatabase(database, table, element, mode, widget.activePlantInformation[4]).then((value){
       List<Measurement> newData = [];
       for(var i in value){
         newData.add(Measurement(timeStamp: DateTime.fromMillisecondsSinceEpoch(i["tijd"]), measurementValue: i[convertAppElementToDatabaseElement(element)]));

@@ -262,13 +262,13 @@ class _AddPageState extends State<AddPage> {
                     ),
                     onPressed: () async {
                       //widget.storage.testSetup(); // Purge local storage/reset data
-                      if (_plantLocatie.text.isEmpty || _plantNaam.text.isEmpty) {
+                      if (_plantLocatie.text.isEmpty || _plantNaam.text.isEmpty || _plantCode.text.isEmpty || imagePath.isEmpty) {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: Text("Error!"),
-                              content: Text("Can't add plant without plant name and location."),
+                              content: Text("Kan geen plant toevoegen zonder naam, locatie, code of afbeelding."),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -285,8 +285,8 @@ class _AddPageState extends State<AddPage> {
                         
                         print('Original path: ${imagePath}');
                         String dir = path.dirname(imagePath);
-                        String newFile = path.join(dir, _plantLocatie.text, '_${_plantNaam.text.toLowerCase()}.jpg');
-                        String newDirectoryPath  = path.join(dir, _plantLocatie.text);
+                        String newFile = path.join(dir, _plantLocatie.text.toLowerCase(), '_${_plantNaam.text.toLowerCase()}.jpg');
+                        String newDirectoryPath  = path.join(dir, _plantLocatie.text.toLowerCase());
                         print('NewPath: ${newDirectoryPath}');   
 
                         Directory newDirectory = Directory(newDirectoryPath);
@@ -321,8 +321,8 @@ class _AddPageState extends State<AddPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("Plant Added!"),
-                              content: Text("Go back to your home screen to see your newly added plant."),
+                              title: Text("Plant toegevoegd!"),
+                              content: Text("Ga terug naar de homepagina om je planten te bekijken!"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
