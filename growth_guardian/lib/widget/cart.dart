@@ -12,6 +12,8 @@ class card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(plantNames);
+    print(roomName);
     double screenWidth = MediaQuery.of(context).size.width;
     List<String> plantNamesList = plantNames.split(",");
     if(plantNamesList.length<4){
@@ -19,7 +21,6 @@ class card extends StatelessWidget {
     }
 
     String dirFoto = path.join('/data/user/0/com.example.growth_guardian/cache/$roomName/_${plantNamesList[0].toLowerCase()}.jpg');
-    
     return GestureDetector(
       onTap: () {
         switchToPlantPage(roomName, plantNamesList[0], plantNamesList[1], dirFoto, plantNamesList[2]);

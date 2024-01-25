@@ -460,10 +460,10 @@ packages:
     dependency: "direct main"
     description:
       name: postgres
-      sha256: "9627629b57bbe5e11ebcd84289d47d95750614968b345446c3f2f087a8084b9d"
+      sha256: d384c0cce2c30f9b349a133812f976ca16fa916fd567882bb6a01741b194c22a
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6"
   quiver:
     dependency: transitive
     description:

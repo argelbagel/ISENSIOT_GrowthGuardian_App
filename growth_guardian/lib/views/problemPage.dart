@@ -27,15 +27,18 @@ class _ProblemPageState extends State<ProblemPage> {
   @override
   Widget build(BuildContext context) {
     List<String> allWarnings = [];
-    
+    print("warnings: " + widget.warnings.toString());
+
     //splits the warnings so they can be put back in the right order with the room inserted into them
     for(String roomWarnings in widget.warnings){
       List<String> allInRoom = roomWarnings.split(";");
       for(int i = 1;i<allInRoom.length;i++){
         List<String> warningSplit = allInRoom[i].split(",");
-        allWarnings.add(warningSplit[0]+","+allInRoom[0]+","+warningSplit[1]);
+        allWarnings.add(warningSplit[0]+","+allInRoom[0]+","+warningSplit[1]+","+warningSplit[2]+","+warningSplit[3]);
       }
     }   
+
+    print("allWarnings: " + allWarnings.toString());
 
     return Scaffold(
       body: RefreshIndicator(
@@ -56,10 +59,14 @@ class _ProblemPageState extends State<ProblemPage> {
               if (index < allWarnings.length) {
                 String warning = allWarnings[index];
                 List<String> parts = warning.split(',');
+                String room = parts[1];
+                parts.removeAt(1);
+                String plantNames = parts.join(",");
+
 
                 return Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: allWarnings[index], roomName: parts[1], switchToPlantPage: widget.switchToPlantPage,)));
+                  child: SizedBox(height:100, width: MediaQuery.of(context).size.width,child:card(plantNames: plantNames, roomName: room, switchToPlantPage: widget.switchToPlantPage,)));
               }
             }
           )

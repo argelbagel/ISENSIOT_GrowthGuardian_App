@@ -178,7 +178,7 @@ class _LandingPageState extends State<LandingPage> {
   int selectedPage = 0;
 
   //Active plant
-  List<String> activePlantInformation = ['kelder', 'kelderplant', 'Narcissus papyraceus', 'locatie', 'cooleCode']; 
+  List<String> activePlantInformation = ['kelder', 'kelderplant', 'Narcissus papyraceus', 'locatie', 'cooleCode', ""]; 
 
   Map<String, dynamic> activePlantStats = {};
 
@@ -199,6 +199,8 @@ class _LandingPageState extends State<LandingPage> {
       "grondwaterniveauMax":100,
       "lichtintensiteitMin":10,
       "lichtintensiteitMax":50,
+      "weekelijkseLichtUrenMin":50,
+      "weekelijkseLichtUrenMax":100, 
     },
     "Dypsis lutescens":{
       "temperatuurMin":15,
@@ -209,6 +211,8 @@ class _LandingPageState extends State<LandingPage> {
       "grondwaterniveauMax":100,
       "lichtintensiteitMin":10,
       "lichtintensiteitMax":50,
+      "weekelijkseLichtUrenMin":50,
+      "weekelijkseLichtUrenMax":100, 
     },
     "Ficus elastica":{
       "temperatuurMin":15,
@@ -219,6 +223,8 @@ class _LandingPageState extends State<LandingPage> {
       "grondwaterniveauMax":100,
       "lichtintensiteitMin":10,
       "lichtintensiteitMax":50,
+      "weekelijkseLichtUrenMin":50,
+      "weekelijkseLichtUrenMax":100, 
     },
     "Narcissus papyraceus":{
       "temperatuurMin":15,
@@ -229,6 +235,8 @@ class _LandingPageState extends State<LandingPage> {
       "grondwaterniveauMax":100,
       "lichtintensiteitMin":10,
       "lichtintensiteitMax":50,
+      "weekelijkseLichtUrenMin":50,
+      "weekelijkseLichtUrenMax":100, 
     },
     "Rhododendron simsii":{
       "temperatuurMin":15,
@@ -239,6 +247,8 @@ class _LandingPageState extends State<LandingPage> {
       "grondwaterniveauMax":100,
       "lichtintensiteitMin":10,
       "lichtintensiteitMax":50,
+      "weekelijkseLichtUrenMin":50,
+      "weekelijkseLichtUrenMax":100, 
       },
     };
 
@@ -294,12 +304,27 @@ class _LandingPageState extends State<LandingPage> {
 
   // 
   void switchToPlantPage(String room, String plantName, String scientificName, String locationImage, String plantCode) {
+    String warningText = "";
+    for(String warning in warnings){
+      if(warning.contains(plantName) && warning.contains(room)){
+        List<String> plantWarnings = warning.split(";");
+        for(String plantWarning in plantWarnings){
+          if(plantWarning.contains(plantName)){
+            List<String> plantWarningInfo = plantWarning.split(",");
+            warningText = plantWarningInfo[3];
+          }
+        }
+      }
+    }
+    print(warningText);
+    print(activePlantInformation.length);
     setState(() {
       activePlantInformation[0] = room;
       activePlantInformation[1] = plantName;
       activePlantInformation[2] = scientificName;
       activePlantInformation[3] = locationImage;
       activePlantInformation[4] = plantCode;
+      activePlantInformation[5] = warningText;
     });
     goToPage(2);
   }
@@ -544,31 +569,24 @@ Future<List<String>> makeWarnings(String database, String table, PlantStorage st
   List<String> warnings = [];
   String fullStorageString = await storage.readPlants();
   List<String> allRooms = fullStorageString.split("/");
-  allRooms.forEach((roomListString) {
+  for(var roomListString in allRooms){
     if(roomListString != ""){
       List<String> roomList = roomListString.split(";");
       String room = roomList[0];
       String roomWarning = room;
       roomList.remove(room);
-      roomList.forEach((plantString) {
+      for(var plantString in roomList){
         List<String> plantList = plantString.split(",");
-        // getLatestPlantInfo(database,table,plantList[2]).then((Map<String, dynamic> plantData){
-        getLatestPlantInfo(database,table,"plantenpot").then((Map<String, dynamic> plantData){
-          print(plantData);
-          String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
-          print(warning);
-          if(warning != "") roomWarning = roomWarning + ";"+ plantList[1] + "," + warning;
-          print(roomWarning);
-        });
-      });
-      print("iets");
-      print(roomWarning);
+        Map<String, dynamic> plantData = await getLatestPlantInfo(database,table,"plantenpot");
+
+        String warning = makeWarning(idealEnvironmentPerSpecies[plantList[1]]!, plantData);
+        if(warning != "") roomWarning = roomWarning + ";"+ plantList[0] + "," + plantList[1] + "," + plantList[2] + "," + warning;
+        print("plantList: " + plantList.toString());
+        print("roomwarning: " + roomWarning);
+      }
       if(roomWarning != room) warnings.add(roomWarning);
-      print(warnings);
     }
-  });
-  print(warnings);
-  print("werkt");
+  }
   return warnings;
 }
 

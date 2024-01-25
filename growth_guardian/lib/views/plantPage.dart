@@ -27,6 +27,10 @@ class _PlantPageState extends State<PlantPage> {
   final String table = 'dogs';
   final String plantName = "plantenpot";
 
+  String status = "Alles gaat goed";
+
+  bool warning = false;
+
   String idealTemp = "...";
   String idealHumid = "...";
   String idealLight = "...";
@@ -50,6 +54,10 @@ class _PlantPageState extends State<PlantPage> {
       // print(newData[19].timeStamp);
       setState(() {
         activeData = newData;
+        if(widget.activePlantInformation[5] != ""){
+          status = widget.activePlantInformation[5];
+          warning = true;
+        }
       });
     });
   }
@@ -82,6 +90,7 @@ class _PlantPageState extends State<PlantPage> {
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
+    print(widget.activePlantInformation);
 
     /*
     print("Naam: ${widget.activePlantInformation[1]}");
@@ -190,7 +199,9 @@ class _PlantPageState extends State<PlantPage> {
               ),
             ),
             Container(
-              width: 250.0,
+              width: warning
+              ? 320
+              : 250.0,
               height: 40.0,
               decoration: BoxDecoration(
                 color:  Theme.of(context).colorScheme.primary,
@@ -202,7 +213,7 @@ class _PlantPageState extends State<PlantPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Status',
+                        text: status,
                         style: TextStyle(color: Colors.white),
                      ),
                     ],
