@@ -1,0 +1,152 @@
+classid,species
+2683217,Cycas revoluta Thunb.
+5284125,Zamia furfuracea L.f.
+2866467,Aglaonema commutatum Schott
+2872695,Anthurium andraeanum Linden ex André
+2872501,Anthurium clarinervium Matuda
+2873525,Anthurium scherzerianum Schott
+2868323,Epipremnum aureum G.S.Bunting (Linden & André)
+2868136,Monstera adansonii Schott
+2868241,Monstera deliciosa Liebm.
+2870781,Philodendron bipinnatifidum Schott ex Endl.
+2871003,Philodendron hederaceum Schott (Jacq.)
+2873745,Scindapsus pictus Hassk.
+2867866,Syngonium podophyllum Schott
+2869014,Zamioculcas zamiifolia Engl. (G.Lodd.)
+2868821,Zantedeschia rehmannii Engl.
+2738902,Caryota mitis Lour.
+2734724,Chamaedorea cataractarum Mart.
+2734661,Chamaedorea elegans Mart.
+2736625,Chamaerops humilis L.
+2735935,Dypsis lutescens Beentje & J.Dransf. (H.Wendl.)
+7857942,Howea forsteriana Becc. (F.Muell.)
+5293153,Phoenix roebelenii O'Brien
+2736747,Rhapis excelsa A.Henry (Thunb.)
+2739071,Trachycarpus fortunei H.Wendl. (Hook.)
+2854740,Agapanthus africanus Hoffmanns. (L.)
+2860119,Hymenocallis littoralis Salisb. (Jacq.)
+7920353,Lycoris radiata Herb. (L'Hér.)
+2858909,Narcissus jonquilla L.
+2860677,Scadoxus multiflorus Raf. (Martyn)
+2766905,Agave parryi Engelm.
+2768503,Asparagus densiflorus Jessop (Kunth)
+2769937,Aspidistra elatior Blume
+2768035,Beaucarnea recurvata Lem.
+2774846,Chlorophytum comosum Jacques (Thunb.)
+7459480,Convallaria majalis L.
+5304583,Dracaena fragrans Ker Gawl. (L.)
+5304436,Dracaena reflexa Lam.
+7431653,Dracaena sanderiana Mast.
+2775144,Eucomis comosa Wehrh. (Houtt.)
+2770617,Sansevieria cylindrica Bojer ex Hook.
+2770610,Sansevieria trifasciata Prain
+5298406,Iris reticulata M.Bieb.
+2765221,Tradescantia pallida D.R.Hunt (Rose)
+2765230,Tradescantia spathacea Sw.
+2765359,Tradescantia zebrina Bosse
+2755905,Tacca chantrieri André
+2740024,Gloriosa superba L.
+2753336,Lilium longiflorum Thunb.
+2698346,Aechmea fasciata Baker (Lindl.)
+2693788,Billbergia nutans H.Wendl. ex Regel
+2699095,Guzmania lingulata Mez (L.)
+2695006,Tillandsia ionantha Planch.
+2716311,Cyperus papyrus L.
+2713316,Isolepis cernua Roem. & Schult. (Vahl)
+2701311,Juncus effusus L.
+2760669,Heliconia psittacorum L.f.
+2761337,Maranta leuconeura É.Morren
+2763088,Musella lasiocarpa C.Y.Wu ex H.W.Li (Franch.)
+2763116,Strelitzia reginae Banks
+5301960,Alpinia purpurata K.Schum. (Vieill.)
+2757556,Curcuma alismatifolia Gagnep.
+2688189,Selaginella kraussiana A.Braun (Kunze)
+3039046,Fatsia japonica Decne. & Planch. (Thunb.)
+8351737,Hedera helix L.
+3035652,Polyscias fruticosa Harms (L.)
+7598400,Chrysanthemum morifolium Ramat.
+3115470,Gynura aurantiaca DC. (Blume)
+5410783,Campanula isophylla Moretti
+3703460,Faucaria tigrina Schwantes (Haw.)
+3085191,Celosia argentea L.
+7280947,Hatiora gaertneri Barthlott (Regel)
+5383983,Schlumbergera truncata Moran (Haw.)
+5421410,Dionaea muscipula Ellis
+3191008,Drosera capensis L.
+3191030,Drosera rotundifolia L.
+5384862,Bougainvillea glabra Choisy
+2888859,Muehlenbeckia complexa Meisn. (A.Cunn.)
+2985994,Hydrangea macrophylla Ser. (Thunb.)
+4156721,Begonia rex Putz.
+7327627,Rhododendron simsii Planch.
+5414379,Ardisia crenata Sims
+3169317,Cyclamen persicum Mill.
+5939805,Darlingtonia californica Torr.
+5421389,Sarracenia purpurea L.
+3189636,Camellia japonica L.
+2982155,Calliandra haematocephala Hassk.
+2969284,Mimosa pudica L.
+3033077,Aucuba japonica Thunb.
+7155887,Adenium obesum Roem. & Schult. (Forssk.)
+3169836,Allamanda cathartica L.
+3169830,Catharanthus roseus G.Don (L.)
+3572767,Ceropegia woodii Schltr.
+8658195,Hoya carnosa R.Br. (L.fil.)
+3573959,Hoya kerrii Craib
+3169756,Nerium oleander L.
+5535474,Pachypodium lamerei Drake
+3169674,Plumeria rubra L.
+3573314,Stephanotis floribunda Brongn.
+2895345,Coffea arabica L.
+5335125,Gardenia jasminoides J.Ellis
+2905493,Ixora coccinea L.
+2911624,Nertera granadensis Druce (Mutis ex L.f.)
+2891603,Pelargonium domesticum L.H.Bailey
+9561762,Pelargonium peltatum L'Hér. (L.)
+7263987,Aphelandra squarrosa Nees
+6359825,Crossandra infundibuliformis Nees (L.)
+3173196,Hypoestes phyllostachya Baker
+3770188,Justicia carnea Lindl.
+3778625,Pachystachys lutea Nees (Ruiz & Pav. ex Schult.)
+4092178,Radermachera sinica Hemsl. (Hance)
+3172881,Episcia cupreata Hanst. (Hook.fil.)
+3889087,Clerodendrum thomsoniae Balf.f.
+3682631,Jasminum polyanthum Franch.
+5414601,Russelia equisetiformis Schltdl. & Cham.
+2925303,Lantana camara L.
+3056051,Acalypha pendula C.Wright ex Griseb.
+3057221,Acalypha wilkesiana Müll.Arg.
+3071476,Codiaeum variegatum Rumph. ex A.Juss. (L.)
+3067157,Euphorbia milii Des Moul.
+3066465,Euphorbia pulcherrima Willd. ex Klotzsch
+2874199,Passiflora caerulea L.
+3152235,Pachira aquatica Aubl.
+3188684,Cuphea ignea A.DC.
+3188507,Medinilla magnifica Lindl.
+3173413,Callistemon citrinus Skeels (Curtis)
+4189296,Peperomia argyreia É.Morren (Miq.)
+3086423,Peperomia obtusifolia A.Dietr. (L.)
+3033107,Helleborus niger L.
+5361932,Ficus benjamina L.
+7835333,Ficus elastica Roxb.
+5361899,Ficus lyrata Warb.
+5361930,Ficus pumila L.
+5671157,Pilea cadierei Gagnep. & Guillaumin
+5669632,Pilea peperomioides Diels
+2984366,Soleirolia soleirolii Dandy (Req.)
+5362063,Crassula ovata Druce (Mill.)
+2985944,Kalanchoe blossfeldiana Poelln.
+2985936,Kalanchoe daigremontiana Raym.-Hamet & Perrier
+4198346,Kalanchoe tomentosa Baker
+5690408,Sedum morganianum Walther
+5688562,Sedum rubrotinctum R.T.Clausen
+3032762,Saxifraga stolonifera Curtis
+5371605,Tolmiea menziesii Torr. & A.Gray (Pursh)
+2932944,Capsicum annuum L.
+2931104,Solanum pseudocapsicum L.
+2684969,Araucaria heterophylla Franco (Salisb.)
+2650676,Asplenium nidus L.
+2650829,Cyrtomium falcatum C.Presl (L.fil.)
+7126767,Platycerium bifurcatum C.Chr. (Cav.)
+5566702,Pellaea rotundifolia Hook. (G.Forst.)
+5275404,Pteris cretica L.

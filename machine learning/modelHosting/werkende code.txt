@@ -1,0 +1,7 @@
+docker run -t --rm -p 8501:8501  -v "C:\Users\michi\serving\tensorflow_serving\servables\tensorflow\testdata/saved_model_half_plus_two_cpu:/models/half_plus_two"  -e MODEL_NAME=half_plus_two  tensorflow/serving &
+
+docker run -t --rm -p 8501:8501  -v "C:\Users\michi\Desktop\school\inisensiot\project\machine learning\code\mlTraining\firstModel:/models/firstModel"  -e MODEL_NAME=firstModel  tensorflow/serving &
+
+docker run -t --rm -p 8501:8501  -v "C:\Users\michi\Desktop\school\inisensiot\project\machine learning\code\modelHosting\models\serveTestModel\model\saved_model:/models/saved_model"  -e MODEL_NAME=model  tensorflow/serving &
+
+docker run -p 8501:8501 --name tensorflowserving --mount type=bind,source="C:\Users\michi\Desktop\school\inisensiot\project\machine learning\code\modelHosting\models\plantModel",target=/models/plantModel -e MODEL_NAME=plantModel -t tensorflow/serving

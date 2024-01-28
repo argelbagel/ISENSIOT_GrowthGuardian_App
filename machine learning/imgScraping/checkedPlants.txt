@@ -1,0 +1,36 @@
+2869345,Dieffenbachia seguine Schott (Jacq.)
+2651816,Adiantum capillus-veneris L.
+2651834,Adiantum tenerum Sw.
+2651826,Adiantum raddianum C.Presl
+2651839,Adiantum hispidulum Sw.
+2651832,Adiantum pedatum L.
+2651833,Adiantum caudatum L.
+6365221,Kohleria amabilis Fritsch (Planch. & Linden)
+2869680,Spathiphyllum wallisii Regel
+2869661,Spathiphyllum cochlearispathum Engl. (Liebm.)
+7156971,Oxalis triangularis A.St.-Hil.
+9561762,Pelargonium peltatum L'Hér. (L.)
+2891603,Pelargonium domesticum L.H.Bailey
+4200411,Echeveria minima Meyrán
+7334164,Echeveria runyonii Rose
+7530398,Echeveria peacockii Croucher
+7333993,Echeveria agavoides Lem.
+7334709,Echeveria colorata Walther
+4202909,Echeveria cante Glass & Mend.-Garc.
+2780304,Haworthia bolusii Baker
+2779810,Haworthia cymbiformis Duval (Haw.)
+2780103,Haworthia cooperi Baker
+7329209,Lithops karasmontana N.E.Br. (Dinter & Schwantes)
+7329207,Lithops lesliei N.E.Br. (N.E.Br.)
+5554360,Lithops dorotheae Nel
+7329191,Lithops olivacea L.Bolus
+5384031,Epiphyllum oxypetalum Haw. (DC.)
+2858739,Narcissus papyraceus Ker Gawl.
+2772094,Muscari botryoides Mill. (L.)
+3038723,Schefflera arboricola Merr. (Hayata)
+3038546,Schefflera actinophylla Harms (Endl.)
+2745739,Neomarica gracilis Sprague (Herb.)
+2745713,Neomarica northiana Sprague (Schneev.)
+2778759,Gasteria pillansii Kensit
+2778642,Gasteria acinacifolia Haw. (J.Jacq.)
+2778567,Gasteria carinata Duval (Mill.)
